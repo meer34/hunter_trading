@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <head th:replace="fragments :: html_head" />
+  <body class="app sidebar-mini rtl">
+    <div th:replace="fragments :: app-layout"></div>
+	
+    <main class="app-content">
+         <div class="row">
+			<div class="col-md-12">
+				<form class="dashboardicon" style="margin-top: 0; text-align: left;" th:action="@{saveStockOut}" method="post" enctype="multipart/form-data">
+				<fieldset style="margin-top: 0;">
+					<legend style="text-align:center; padding-bottom: 60px;" th:text="${header}"></legend>
+					<div id="tab1">
+						<div class="col-lg-12 flexdisplay">
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<label>Buyer Name</label>
+								<select class="form-control" name="customer" id="select" style="height: 48px;" required>
+									<option selected disabled="disabled" value="">Buyer Name</option>
+									<option style="color: #333;" th:each="customer : ${customers}" 
+										th:text="${customer.name}" th:value="${customer.id}" th:selected="${customer.id==stockOut?.customer?.id}"></option>
+								</select>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<label>GST</label>
+								<input type="text" class="form-control" name="gst" placeholder="GST" th:value="${stockOut?.gst}">
+							</div>
+						</div>
+						<div class="col-lg-12 flexdisplay">
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<label>Date</label>
+								<input type="date" class="form-control" name="date" placeholder="Date" th:value="${stockOut?.date}">
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<label>Remarks</label>
+								<input type="text" class="form-control" name="remarks" placeholder="Remarks" th:value="${stockOut?.remarks}">
+							</div>
+						</div>
+						<div class="clearfix"></div>
+						<div class="row addProduct">
+						<div class="col-lg-12 flexdisplay">
+							<div class="col-lg-12">
+								<label>Product Details Entry</label>
+							</div>
+						</div>
+						<div class="col-lg-12 flexdisplay">
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input type="text" id="scanCode" placeholder="Scan Code" autocomplete="off" >
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input type="button" name="stockOutScan" id="scanCodeBtn" value="Scan" style="background-color: #668361;color: #FFF;">
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<select class="form-control" id="productNames" style="height: 48px;" onchange="onProductChange(this.value)">
+									<option selected disabled="disabled" value="">Select Product</option>
+									<option style="color: #333;" th:each="productName : ${productNames}" th:text="${productName}"></option>
+								</select>
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<select class="form-control" id="sizes" style="height: 48px;" onchange="onSizeChange(this.value)">
+									<option selected disabled="disabled" value="">Size</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-lg-12 flexdisplay">
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<select class="form-control" id="colours" style="height: 48px;" onchange="onColourChange(this.value)">
+									<option selected disabled="disabled" value="">Colour</option>
+								</select>
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<select class="form-control" id="brands" style="height: 48px;" onchange="setMaxQuantity(this.value)">
+									<option selected disabled="disabled" value="">Brand</option>
+								</select>
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12" id="quantityOuter">
+								<input type="text" class="form-control" id="quantity" placeholder="Quantity" onChange="calculateAmount()">
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+								<input type="text" class="form-control" id="rate" placeholder="Rate" onChange="calculateAmount()">
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+								<input type="text" class="form-control" id="amount" placeholder="Amount">
+							</div>
+						</div>
+						<div class="col-lg-12 flexdisplay">
+							<div class="col-lg-12">
+								<input type ="button" style="background-color: #0b6400; color: #FFF;width: auto;padding: 10px 15px;" value="Add Product" id="addStockOutPartBtn">
+							</div>
+						</div>
+						</div>
+						<div class="table-responsive table_size" style="margin-top: 50px;">
+							<table class="table table-bordered table-responsive table-hover" style="width: 100%;" id="productTable" >
+							<thead class="thead-inverse">
+								<tr style="background-color: #0b6400; color: #FFF;">
+									<th style="width: 20%;">Product Name</th>
+									<th>Size</th>
+									<th>Colour</th>
+									<th>Brand</th>
+									<th>Quantity</th>
+									<th>Rate</th>
+									<th>Amount</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr style="background-color: #FFF" th:each="stockOutProduct : ${stockOut?.productList}">
+									<td style="width: 20%;" th:text="${stockOutProduct?.product?.name}" />
+									<td th:text="${stockOutProduct?.product?.size}" />
+									<td th:text="${stockOutProduct?.product?.colour}" />
+									<td th:text="${stockOutProduct?.product?.brand}" />
+									<td th:text="${stockOutProduct?.quantity}" />
+									<td th:text="${stockOutProduct?.rate}" />
+									<td th:text="${stockOutProduct?.amount}" />
+									<td style="width: 8%;">
+										<div class="dashboardicon2" style="text-align: left;" >
+											<i class="fa fa-close buttonNew2" id="deleteProductBtn"></i>
+											<input type="hidden" name="stockOutParts" class="submit action-button2" 
+											th:value="${stockOutProduct?.id} + '|~|' +  ${stockOutProduct?.product?.id} + '|~|' + ${stockOutProduct?.quantity} + '|~|' + ${stockOutProduct?.rate} + '|~|' + ${stockOutProduct?.amount}" >
+										</div>
+									</td>
+								</tr>
+							</tbody>
+							</table>
+						</div>
+						<input type="button" id="cancelBtn" class="previous action-button-previous" value="Cancel" onclick="window.history.back()">
+						<input type="button" id="nextBtn" class="submit action-button" value="Next" onclick="nextTab()">
+					</div><!--Tab 1 end-->
+					
+					
+					
+					<div id="tab2">
+						<div class="col-lg-12 flexdisplay">
+							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+								<label>Bill No</label>
+								<input type="text" class="form-control" name="billNo" placeholder="Enter Bill No" th:value="${stockOut?.billNo}">
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+								<label>Bill Type</label>
+								<select class="form-control" name="billType" id="billType" style="height: 48px;" onChange="toggleGSTInfo(this.value)">
+									<option selected disabled="disabled" value="">Select Type</option>
+									<option th:selected="${stockOut?.billType =='GST'}">GST</option>
+									<option th:selected="${stockOut?.billType =='Non GST'}">Non GST</option>
+								</select>
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+								<label>Discount</label>
+								<input type="number" min="0" class="form-control" name="discount" value="0" th:value="${stockOut?.discount}">
+							</div>
+						</div>
+						
+						<div class="col-lg-12 flexdisplay" id="gstInfo">
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<label>HSN Code</label>
+								<input type="text" class="form-control" name="hsnCode" placeholder="Enter HSN Code" th:value="${stockOut?.hsnCode}">
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<label>CGST(%)</label>
+								<input type="number" min="0" max="100" class="form-control" name="cgst" value="0" th:value="${stockOut?.cgst}">
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<label>SGST(%)</label>
+								<input type="number" min="0" max="100" class="form-control" name="sgst" value="0" th:value="${stockOut?.sgst}">
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<label>IGST(%)</label>
+								<input type="number" min="0" max="100" class="form-control" name="igst" value="0" th:value="${stockOut?.igst}">
+							</div>
+						</div>
+						
+						<div class="col-lg-12 flexdisplay">
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<label>Labour Charge</label>
+								<input type="number" min="0" class="form-control" name="labourCharge" value="0" th:value="${stockOut?.labourCharge}">
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<label>Payment Date</label>
+								<input type="date" class="form-control" name="paymentDate" placeholder="Payment Date" th:value="${stockOut?.paymentDate}">
+							</div>
+						</div>
+						
+						<div class="col-lg-12 flexdisplay">
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<label>Total Paid</label>
+								<input type="number" min="0" class="form-control" name="totalPaid" value="0" th:value="${stockOut?.totalPaid}">
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<label>Total Due</label>
+								<input type="number" class="form-control" name="totalDue" id="totalDue" value="0" th:value="${stockOut?.totalDue}" readonly>
+							</div>
+						</div>
+						
+						<input th:if="${stockOut?.id}" type="hidden" name="id" th:value="${stockOut?.id}">
+						<input type="button" id="previousBtn" class="previous action-button-previous" value="Previous" onclick="previousTab()">
+						<input type="submit" name="submit" class="submit action-button" value="Save">
+					</div> <!--End of tab 2-->
+					
+					
+					</fieldset>
+				</form>
+			</div>
+		</div>
+		
+    </main>
+	
+	<div th:replace="fragments :: scan_qr_modal"></div>
+	<div th:replace="fragments :: main_scripts"></div>
+	<div th:replace="fragments :: add_edit_scripts"></div>
+	<script>
+		document.getElementById("tab2").style.display = "none";
+		
+		billType = document.getElementById("billType").value;
+		if(billType != null && billType == 'GST'){
+			document.getElementById("gstInfo").style.display = "inline";
+		} else{
+			document.getElementById("gstInfo").style.display = "none";
+		}
+		
+		function validatePageData(tag){
+			var inputs = document.getElementById('tab1').getElementsByTagName(tag);
+		    for(var i=0; i < inputs.length; i++){
+		      if(inputs[i].value === '' && inputs[i].hasAttribute('required')){
+		        alert(inputs[i].name + ' field is required!');
+		        return false;
+		      }
+		    }
+		    return true;
+		}
+		function nextTab(){
+			if(validatePageData("select") && validatePageData("input")){
+				document.getElementById("tab1").style.display = "none";
+				document.getElementById("tab2").style.display = "inline";
+			}
+		}
+		function previousTab(){
+			document.getElementById("tab2").style.display = "none";
+			document.getElementById("tab1").style.display = "inline";
+		}
+		function toggleGSTInfo(billType){
+			if(billType == 'GST'){
+				document.getElementById("gstInfo").style.display = "inline";
+			} else{
+				document.getElementById("gstInfo").style.display = "none";
+			}
+		}
+	</script>
+   </body>
+</html>

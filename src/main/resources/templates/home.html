@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <head th:replace="fragments :: html_head" />
+  <body class="app sidebar-mini rtl">
+    <div th:replace="fragments :: app-layout"></div>
+	
+    <main class="app-content">
+		<div class="row">  
+			<div class="col-lg-12">
+				<div class="tile">
+					<div class="dashboardicon2">
+						<a th:href="@{/addStockInPage}"><input type="button" name="sIn" class="submit action-button" value="New Product Entry"></a>
+						<a th:href="@{/total-stock}"><input type="button" name="sOut" class="submit action-button" value="Product Stock"></a>
+						<a th:href="@{/addStockOutPage}"><input type="button" name="addSIn" class="submit action-button" value="New Sale Entry"></a>
+						<a th:href="@{/total-sell}"><input type="button" name="totalSale" class="submit action-button" value="Total Sale"></a>
+						<a th:href="@{/bill}"><input type="button" name="addSOut" class="submit action-button" value="Bill"></a>
+					</div>
+				</div>
+			</div>
+         </div>
+                   <div class="row">
+        <div class="col-md-12">
+          <div class="tile">
+            <h3 class="tile-title">View Stock Report</h3>
+			<form class="dashboardicon" th:action="@{/searchStockDashboard}" method="get" >
+				<div class="col-lg-12 flexdisplay">
+					<div class="col-lg-6 col-xs-12">
+						<label>From Date</label>
+						<input type="date" name="fromDate" >
+					</div>
+					<div class="col-lg-6 col-xs-12">
+						<label>To Date</label>
+						<input type="date" name="toDate" style="animation-delay: .2s">
+					</div>
+					<div class="col-lg-6 col-xs-12">
+						<label>Search</label>
+						<input type="text" name="mahajanName" id="searchTable" placeholder="Mahajan Name">
+					</div>
+				</div>
+				<input type="button" name="cancel" class="previous action-button-previous" value="Cancel">
+				<input type="submit" name="submit" class="submit action-button" value="Search">
+			</form>
+			<div class="table-responsive table_size" style="margin-top: 12px;">          
+				<table class="table table-bordered table-responsive table-hover" style=" width: 100%;">
+					<thead class="thead-inverse" style="background-color:#0b6400; color:#FFF;">
+					<tr>
+						<th class="table_heading" style="width: 20%;">Product Name</th>
+						<th class="table_heading" style="width: 20%;">Brand</th>
+						<th class="table_heading" style="width: 20%;">Quantity(Stock In)</th>
+						<th class="table_heading" style="width: 20%;">Quantity(Stock Out)</th>
+						<th class="table_heading" style="width: 20%;">Total Stock</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr style="background-color:#FFF" th:each="dashboard : ${dashboardList}">
+							<td th:text="${dashboard.productName}" />
+							<td th:text="${dashboard.brand}" />
+							<td th:text="${dashboard.stockInQuantity}" />
+							<td th:text="${dashboard.stockOutQuantity}" />
+							<td th:text="${dashboard.stockInQuantity - dashboard.stockOutQuantity}" />
+						</tr>
+					</tbody>
+				</table>
+			</div>    
+          </div>
+        </div>
+      </div>
+    </main>
+	
+	
+    <div th:replace="fragments :: main_scripts"></div>
+    <div th:replace="fragments :: table_search_script"></div>
+  </body>
+</html>

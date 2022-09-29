@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <head th:replace="fragments :: html_head" />
+  <body class="app sidebar-mini rtl">
+    <div th:replace="fragments :: app-layout"></div>
+	
+      <main class="app-content">
+         <div class="row">
+			<div class="col-md-12">
+				<form class="dashboardicon" style="margin-top: 0; text-align: left;" th:action="@{addStockIn}" method="post" enctype="multipart/form-data">
+					<fieldset style="margin-top: 0;" id="printTable" >
+					<legend style="text-align:center; padding-bottom: 60px;" > Stock In</legend>
+					<div class="col-lg-12 flexdisplay">
+						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+							<label>Bill No</label>
+							<input type="text" class="form-control" name="billNo" id="billNo" th:value="${stockIn?.billNo}">
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+							<label>Mahajan Name</label>
+							<input type="text" class="form-control" name="mahajan" id="mahajan" th:value="${stockIn?.mahajan?.name}">
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+							<label>Date</label>
+							<input type="Date" class="form-control" name="date" id="date" th:value="${stockIn?.date}">
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+							<label>Remarks</label>
+							<input type="text" class="form-control" name="remarks" id="remarks" th:value="${stockIn?.remarks}">
+						</div>
+					</div>
+					<div class="table-responsive table_size" style="margin-top: 50px;">
+						<table class="table table-bordered table-responsive table-hover" style="width: 100%;" id="productTable" >
+							<thead id="myHeader" class="thead-inverse" style="background-color: #0b6400; color: #FFF;">
+								<tr>
+									<th colspan="8" class="table_heading">Products</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr style="background-color: #0b6400; color: #FFF;">
+									<td style="width: 20%;">Product Name</td>
+									<td>Scan Code</td>
+									<td>Size</td>
+									<td>Colour</td>
+									<td>Brand</td>
+									<td>Quantity</td>
+									<td>Rate</td>
+									<td>Amount</td>
+								</tr>
+								<tr style="background-color: #FFF" th:each="product : ${stockIn?.productList}">
+									<td style="width: 20%;" th:text="${product?.name}" />
+									<td th:text="${product?.scanCode}" />
+									<td th:text="${product?.size}" />
+									<td th:text="${product?.colour}" />
+									<td th:text="${product?.brand}" />
+									<td th:text="${product?.quantity}" />
+									<td th:text="${product?.rate}" />
+									<td th:text="${product?.amount}" />
+								</tr>
+							</tbody>
+							</table>
+					</div>
+					<input type="button" class="previous action-button-previous" value="Cancel" onclick="window.history.back()" >
+					<input type="button" class="submit action-button" value="Print" onclick="printData()" >
+					</fieldset>
+				</form>
+			</div>
+		</div>
+		
+    </main>
+	
+	<div th:replace="fragments :: main_scripts"></div>
+   </body>
+</html>

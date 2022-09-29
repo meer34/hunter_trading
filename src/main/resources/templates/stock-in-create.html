@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <head th:replace="fragments :: html_head" />
+  <body class="app sidebar-mini rtl">
+    <div th:replace="fragments :: app-layout"></div>
+	
+      <main class="app-content">
+         <div class="row">
+			<div class="col-md-12">
+				<form class="dashboardicon" style="margin-top: 0; text-align: left;" th:action="@{/addStockIn}" method="post" enctype="multipart/form-data">
+					 <fieldset style="margin-top: 0;">
+					 	<legend style="text-align:center; padding-bottom: 60px;" th:text="${header}"></legend>
+						<div class="col-lg-12 flexdisplay">
+							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+								<label>Bill No</label>
+								<input type="text" class="form-control" name="billNo" id="billNo" placeholder="Bill No" th:value="${stockIn?.billNo}">
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+								<label>Mahajan Name</label>
+								<select class="form-control" name="mahajan" id="select" style="height: 48px;" >
+									<option selected disabled="disabled" value="">Mahajan Name</option>
+									<option style="color: #333;" th:each="mahajan : ${mahajans}" th:text="${mahajan.name}" th:value="${mahajan.id}" 
+										th:selected="${mahajan.id==stockIn?.mahajan?.id}"></option>
+								</select>
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+								<label>Date</label>
+								<input type="Date" class="form-control" name="date" id="date" placeholder="Date" th:value="${stockIn?.date}">
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+								<label>Remarks</label>
+								<input type="text" class="form-control" name="remarks" id="remarks" placeholder="Remarks" th:value="${stockIn?.remarks}">
+							</div>
+						</div>
+						<div class="table-responsive table_size" style="margin-top: 50px;">
+							<table class="table table-bordered table-responsive table-hover" style="width: 100%;" id="productTable" >
+							<thead id="myHeader" class="thead-inverse" style="background-color: #0b6400; color: #FFF;">
+								<tr>
+									<th colspan="9" class="table_heading">Select Product</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr style="background-color: #FFF">
+									<td>
+										<input type="text" id="scanCode" placeholder="Scan Code" autocomplete="off" >
+										<input type="button" name="stockInScan" id="scanCodeBtn" value="Scan">
+									</td>
+									<td style="width: 20%;"><input type="text" class="form-control" id="productName" placeholder="Product Name"> </td>
+									<td> <input type="text" class="form-control" id="size" placeholder="Size"> </td>
+									<td> <input type="text" class="form-control" id="colour" placeholder="Colour"> </td>
+									<td> <input type="text" class="form-control" id="brand" placeholder="Brand"> </td>
+									<td> <input type="text" class="form-control" id="quantity" placeholder="Quantity" onChange="calculateAmount()"> </td>
+									<td> <input type="text" class="form-control" id="rate" placeholder="Rate" onChange="calculateAmount()"> </td>
+									<td> <input type="text" class="form-control" id="amount" placeholder="Amount"> </td>
+									<td style="width: 8%;">
+										<div class="dashboardicon2" style="text-align: left;">
+											<i class="fa fa-plus buttonNew" id="addStockInPartBtn"></i>
+										</div>
+									</td>
+								</tr>
+								<tr style="background-color: #FFF" th:each="product : ${stockIn?.productList}">
+									<td th:text="${product?.scanCode}" />
+									<td style="width: 20%;" th:text="${product?.name}" />
+									<td th:text="${product?.size}" />
+									<td th:text="${product?.colour}" />
+									<td th:text="${product?.brand}" />
+									<td th:text="${product?.quantity}" />
+									<td th:text="${product?.rate}" />
+									<td th:text="${product?.amount}" />
+									<td style="width: 8%;">
+										<div class="dashboardicon2" style="text-align: left;" >
+											<i class="fa fa-close buttonNew2" id="deleteProductBtn"></i>
+											<input type="hidden" name="stockInParts" class="submit action-button2" 
+											th:value="${product?.id} + '|~|' +  ${product?.name} + '|~|' +  ${product?.size} + '|~|' + ${product?.colour} + '|~|' + ${product?.brand} + '|~|' + ${product?.quantity} + '|~|' + ${product?.rate} + '|~|' + ${product?.amount}" >
+										</div>
+									</td>
+								</tr>
+							</tbody>
+							</table>
+						</div>
+						<input th:if="${stockIn?.id}" type="hidden" name="id" th:value="${stockIn?.id}">
+						<input type="button" name="cancel" class="previous action-button-previous" value="Cancel" onclick="window.history.back()">
+						<input type="submit" name="submit" class="submit action-button" value="Save">
+					</fieldset>
+				</form>
+			</div>
+		</div>
+		
+    </main>
+	
+	<div th:replace="fragments :: scan_qr_modal"></div>
+	<div th:replace="fragments :: main_scripts"></div>
+	<div th:replace="fragments :: add_edit_scripts"></div>
+   </body>
+</html>
