@@ -16,7 +16,11 @@
                   <input type="text" name="phone" placeholder="Phone" th:value="${reminder?.phone}">
                   <input type="text" name="message" placeholder="Message" th:value="${reminder?.message}">
                   <input type="date" name="date" placeholder="Date Of Message Delivery" th:value="${reminder?.date}">
-                  <input type="text" name="status" placeholder="Status" value="Pending">
+                  <select class="form-control" name="status" id="select" style="height: 48px;" >
+                  	<option selected disabled="disabled" value="">Status</option>
+                  	<option th:selected="${reminder?.status == 'Sent'}">Sent</option>
+                  	<option th:selected="${reminder?.status == 'Pending'}">Pending</option>
+                  </select>
                   
 				  <input type="hidden" name="id" th:value="${reminder?.id}">
                   <input type="button" name="cancel" class="previous action-button-previous" value="Cancel" onclick="window.history.back()">

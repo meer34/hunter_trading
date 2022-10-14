@@ -15,12 +15,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hunter.web.model.User;
 import com.hunter.web.repo.UserRepository;
+import com.hunter.web.util.AppUtility;
 
 @Controller
 public class OTPController {
 
 	@Autowired UserRepository userRepo;
-	@Autowired HunterGarmentsUtility utility;
+	@Autowired AppUtility utility;
 	
 	@GetMapping("/generatePin")
 	@ResponseBody 

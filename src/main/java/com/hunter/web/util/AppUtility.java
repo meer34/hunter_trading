@@ -1,4 +1,4 @@
-package com.hunter.web.controller;
+package com.hunter.web.util;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @PropertySource("classpath:hunter_garments.properties")
-public class HunterGarmentsUtility {
+public class AppUtility {
 	
 	@Value("${fast2sms.api.url}")
 	private String apiURL;

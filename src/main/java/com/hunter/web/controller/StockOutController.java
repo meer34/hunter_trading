@@ -30,9 +30,7 @@ public class StockOutController {
 	@Autowired StockOutService stockOutService;
 	@Autowired StockInService stockInService;
 	@Autowired CustomerService customerService;
-	
-	@Value("${INITIAL_PAGE_SIZE}")
-	private Integer initialPageSize;
+	@Value("${INITIAL_PAGE_SIZE}") private Integer initialPageSize;
 
 	@GetMapping("/stock-out")
 	public String showStockIn(Model model,

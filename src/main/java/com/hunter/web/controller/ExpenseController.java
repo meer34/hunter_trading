@@ -34,15 +34,15 @@ import com.hunter.web.service.ModeratorService;
 @Controller
 @PropertySource("classpath:hunter_garments.properties")
 public class ExpenseController {
-	
+
 	@Autowired ExpenseService expenseService;
 	@Autowired ExpenseTypeRepo expenseTypeRepo;
 	@Autowired ModeratorService moderatorService;
-	
+
 	@Value("${INITIAL_PAGE_SIZE}")
 	private Integer initialPageSize;
-	
-	String expenseBillPath = "/files/hunter/bill/expense/";
+
+	static String expenseBillPath = "/files/hunter_garments/bill/expense/";
 
 	@GetMapping("/expense-type")
 	public String showExpenseTypes(Model model) {
@@ -55,7 +55,7 @@ public class ExpenseController {
 		model.addAttribute("header", "Add Expense Category");
 		return "add-expense-category";
 	}
-	
+
 	@RequestMapping(value = "/editExpenseTypePage",
 			method = RequestMethod.GET)
 	public String editExpenseTypePage(Model model, @RequestParam("id") Long id) throws Exception{
@@ -64,21 +64,21 @@ public class ExpenseController {
 
 		model.addAttribute("header", "Edit Expense Category");
 		model.addAttribute("expenseType", expenseTypeRepo.findById(id).get());
-		
+
 		return "add-expense-category";
 
 	}
-	
+
 	@RequestMapping(value = "/saveExpenseType",
 			method = RequestMethod.POST)
 	public String saveExpenseType(Model model, ExpenseType expense, RedirectAttributes redirectAttributes) throws Exception{
-		
+
 		expenseTypeRepo.save(expense);
 		redirectAttributes.addFlashAttribute("successMessage", "Expense category saved successfully!");
 		return "redirect:/expense-type";
 
 	}
-	
+
 	@GetMapping("/expense")
 	public String showExpenses(Model model,
 			@RequestParam("page") Optional<Integer> page,
@@ -87,14 +87,14 @@ public class ExpenseController {
 			@RequestParam(value="toDate", required = false) String toDate,
 			@RequestParam(value="keyword", required = false) String keyword,
 			@RequestParam(value="expenseTypeId", required = false) Long expenseTypeId) throws ParseException {
-		
+
 		Page<Expense> listPage = null;
-		
+
 		if(keyword == null && fromDate == null && toDate == null) {
 			System.out.println("Expense home page");
 			if(expenseTypeId != null) listPage = expenseService.getAllExpensesForType(expenseTypeId, page.orElse(1) - 1, size.orElse(initialPageSize));
 			else listPage = expenseService.getAllExpenses(page.orElse(1) - 1, size.orElse(initialPageSize));
-			
+
 		} else {
 			System.out.println("Searching Expense for fromDate:" + fromDate + " and toDate:" +toDate +" and keyword:" + keyword);
 			listPage = expenseService.searchExpenseByDateAndKeyword(keyword, fromDate, toDate, page.orElse(1) - 1, size.orElse(initialPageSize));
@@ -102,9 +102,9 @@ public class ExpenseController {
 			model.addAttribute("fromDate", fromDate);
 			model.addAttribute("toDate", toDate);
 			model.addAttribute("keyword", keyword);
-			
+
 		}
-		
+
 		model.addAttribute("listPage", listPage);
 		int totalPages = listPage.getTotalPages();
 		if (totalPages > 0) {
@@ -113,22 +113,22 @@ public class ExpenseController {
 					.collect(Collectors.toList());
 			model.addAttribute("pageNumbers", pageNumbers);
 		}
-		
+
 		return "expense";
 
 	}
 
 	@GetMapping("/addExpensePage")
 	public String showAddExpensePage(Model model) {
-		
+
 		model.addAttribute("users", moderatorService.getAllUsers());
 		model.addAttribute("expenseTypes", expenseTypeRepo.findAll());
 		model.addAttribute("header", "Add Expense");
-		
+
 		return "expense-create";
-		
+
 	}
-	
+
 	@RequestMapping(value = "/editExpensePage",
 			method = RequestMethod.GET)
 	public String editExpensePage(Model model, @RequestParam("id") Long id) throws Exception{
@@ -138,37 +138,41 @@ public class ExpenseController {
 		model.addAttribute("users", moderatorService.getAllUsers());
 		model.addAttribute("expenseTypes", expenseTypeRepo.findAll());
 		model.addAttribute("header", "Edit Expense");
-		
+
 		model.addAttribute("expense", expenseService.findExpenseById(id));
-		
+
 		return "expense-create";
 
 	}
-	
+
 	@RequestMapping(value = "/saveExpense",
 			method = RequestMethod.POST)
 	public String saveExpense(Model model, Expense expense, RedirectAttributes redirectAttributes) throws Exception{
-		
+
 		try {
 			String fileName = StringUtils.cleanPath(expense.getBillFile().getOriginalFilename());
-			if(fileName.contains("..")) System.out.println("Not a a valid file");
-			
-			String expenseBillFileName = "Bill_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + "_" + fileName;
-			Path path = Paths.get(expenseBillPath + expenseBillFileName);
-			Files.copy(expense.getBillFile().getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-			
-			expense.setBillFileName(expenseBillFileName);
-			
+			if(!"".equals(fileName)) {
+				String expenseBillFileName = "Bill_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + "_" + fileName;
+				Path path = Paths.get(expenseBillPath + expenseBillFileName);
+				Files.copy(expense.getBillFile().getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+				
+				if(expense.getBillFileName() != null && !"".equals(expense.getBillFileName())) {
+					Files.delete(Paths.get(expenseBillPath + expense.getBillFileName()));
+				}
+				
+				expense.setBillFileName(expenseBillFileName);
+			}
+
 		} catch (IOException e) {
 			System.out.println("Exception while saving expense bill file in local - " + e.getMessage());
 		}
-		
+
 		expenseService.saveExpenseToDB(expense);
 		redirectAttributes.addFlashAttribute("successMessage", "Expense record saved successfully!");
 		return "redirect:/expense";
 
 	}
-	
+
 	@RequestMapping(value = "/viewExpense",
 			method = RequestMethod.GET)
 	public String viewIncome(Model model, @RequestParam("id") Long id) throws Exception{
@@ -184,14 +188,18 @@ public class ExpenseController {
 	public String deleteIncome(RedirectAttributes redirectAttributes, @RequestParam("id") Long id) throws IOException {
 
 		System.out.println("Got delete request for expense id " + id);
-		Path path = Paths.get(expenseBillPath + expenseService.findExpenseById(id).getBillFileName());
+		
+		String billFileName = expenseService.findExpenseById(id).getBillFileName();
+		try {
+			if(billFileName != null && !billFileName.equals("")) Files.delete(Paths.get(expenseBillPath + billFileName));
+		} catch(Exception e) {
+			System.out.println("Bill file not found with name - " + billFileName);
+		}
 		
 		expenseService.deleteExpenseById(id);
-		Files.delete(path);
-		
 		redirectAttributes.addFlashAttribute("successMessage", "Expense record deleted successfully!");
 		return "redirect:/expense";
 
 	}
-	
+
 }

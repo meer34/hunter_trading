@@ -8,7 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.hunter.web.model.Expense;
-import com.hunter.web.model.StockIn;
 import com.hunter.web.repo.ExpenseRepo;
 import com.hunter.web.specification.ExpenseSearchSpecification;
 import com.hunter.web.util.SearchSpecificationBuilder;
@@ -43,7 +42,7 @@ public class ExpenseService {
 			String fromDate, String toDate, int pageNo, Integer pageSize) throws ParseException {
 
 		PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
-		ExpenseSearchSpecification spec = (ExpenseSearchSpecification) SearchSpecificationBuilder.build(fromDate, toDate, keyword, StockIn.class);
+		ExpenseSearchSpecification spec = (ExpenseSearchSpecification) SearchSpecificationBuilder.build(fromDate, toDate, keyword, Expense.class);
 		return expenseRepo.findAll(spec, pageRequest);
 
 	}

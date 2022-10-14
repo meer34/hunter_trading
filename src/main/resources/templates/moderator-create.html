@@ -15,7 +15,7 @@
 					<div class="dashboardicon">
 					  <form th:action="@{createModerator}" method="post" onsubmit="return checkIfNumberExistForOthers('MODERATOR')" >
 						<input type="text" name="name" placeholder="Name" th:value="${moderator.name}" required >
-						<input type="text" name="phone" id="phone" placeholder="Phone" th:value="${moderator.phone}" required >
+						<input type="number" name="phone" id="phone" placeholder="Phone" th:value="${moderator.phone}" required >
 						<input type="text" name="address" placeholder="Address" th:value="${moderator.address}" >
 						<input type="hidden" name="id" id="userId" th:value="${moderator.id}">
 						<input type="button" name="cancel" class="previous action-button-previous" value="Cancel" onclick="window.history.back()" >

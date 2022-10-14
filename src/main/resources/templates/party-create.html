@@ -14,7 +14,7 @@
                <div class="dashboardicon">
                <form th:action="@{create-party}" method="post">
                   <input type="text" name="name" placeholder="Name" th:value="${party.name}" >
-                  <input type="text" name="phone" placeholder="Phone" th:value="${party.phone}" >
+                  <input type="number" name="phone" placeholder="Phone" th:value="${party.phone}" >
                   <input type="text" name="address" placeholder="Address" th:value="${party.address}" >
                   <input type="text" name="gst" placeholder="GST" th:value="${party.gst}" >
 				  <input type="hidden" name="id" th:value="${party.id}">

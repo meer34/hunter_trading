@@ -21,13 +21,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hunter.web.model.Reminder;
 import com.hunter.web.service.ReminderService;
+import com.hunter.web.util.AppUtility;
 
 @Controller
 @PropertySource("classpath:hunter_garments.properties")
 public class ReminderController {
 
 	@Autowired ReminderService reminderService;
-	@Autowired HunterGarmentsUtility utility;
+	@Autowired AppUtility utility;
 
 	@Value("${INITIAL_PAGE_SIZE}")
 	private Integer initialPageSize;

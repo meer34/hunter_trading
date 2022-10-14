@@ -12,14 +12,12 @@
 				<div class="tile">
 				<h1 class="tile-title text-center" style="font-size:16px;">View Customer</h1>
 				<div class="dashboardicon">
-				<form th:action="@{createCustomer}" method="post">
-					<input type="text" name="name" placeholder="Name" th:value="${customer.name}" readonly >
-					<input type="text" name="phone" placeholder="Phone" th:value="${customer.phone}" readonly >
-					<input type="text" name="address" placeholder="Address" th:value="${customer.address}" readonly >
-					<input type="text" name="gst" placeholder="GST" th:value="${customer.gst}" readonly >
+					<input type="text" name="name" th:value="${customer.name}" readonly >
+					<input type="text" name="phone" th:value="${customer.phone}" readonly >
+					<input type="text" name="address" th:value="${customer.address}" readonly >
+					<input type="text" name="gst" th:value="${customer.gst}" readonly >
 					<input type="button" name="cancel" class="previous action-button-previous" value="Back" th:attr="onclick=|location.href='@{/customer}'|" >
-					<input type="submit" name="print" class="submit action-button" value="Print" onclick="printData()">
-					</form>
+					<input type="button" name="print" class="submit action-button" value="Print" onclick="printData()">
 				</div>
 				</div>
 			</div>

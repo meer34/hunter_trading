@@ -4,7 +4,7 @@ function calculateAmount() {
 
 	amount = rate * quantity;
 
-	document.getElementById("amount").outerHTML = `<input type="text" class="form-control" id="amount" value="` + amount + `" placeholder="Amount">`;
+	document.getElementById("amount").outerHTML = `<input type="number" class="form-control" id="amount" value="` + amount + `" placeholder="Amount" readonly>`;
 }
 
 function calculateTotalIncExp() {
@@ -25,7 +25,7 @@ $("#addStockInPartBtn").click(function () {
 	scanCode = document.getElementById("scanCode");
 
 	var table = document.getElementById("productTable");
-	var row = table.insertRow(2);
+	var row = table.insertRow(1);
 
 	row.insertCell(0).innerHTML = scanCode.value;
 	row.insertCell(1).innerHTML = productName.value;
@@ -90,6 +90,19 @@ $("#addStockOutPartBtn").click(function () {
 			+ `<i class="fa fa-close buttonNew2" id="deleteProductBtn"></i>`
 			+ `<input type="hidden" name="stockOutParts" value="`+ stockOutParts +`" >`;
 	
+	var sizeTag = '<option selected disabled="disabled" value="">Size</option>';
+	var colourTag = '<option selected disabled="disabled" value="">Colour</option>';
+	var brandTag = '<option selected disabled="disabled" value="">Brand</option>';
+	var quantityTag = '<input type="number" class="form-control" id="quantity" placeholder="Quantity" onChange="calculateAmount()">';
+	var rateTag = '<input type="number" class="form-control" id="rate" placeholder="Rate" onChange="calculateAmount()">';
+	var amountTag = '<input type="number" class="form-control" id="amount" placeholder="Amount" readonly>';
+	
+	$('#sizes').html(sizeTag);
+	$('#colours').html(colourTag);
+	$('#brands').html(brandTag);
+	$('#quantity').html(quantityTag);
+	$('#rate').html(rateTag);
+	$('#amount').html(amountTag);
 
 });
 

@@ -45,11 +45,12 @@ public class IncomeController {
 	@Autowired IncomeService incomeService;
 	@Autowired IncomeTypeRepo incomeTypeRepo;
 	@Autowired ModeratorService moderatorService;
-	
+
 	@Value("${INITIAL_PAGE_SIZE}")
 	private Integer initialPageSize;
 
-	String incomeBillPath = "/files/hunter/bill/income/";
+	static String incomeBillPath = "/files/hunter_garments/bill/income/";
+	static String downloadBasePath = "/files/hunter_garments/";
 
 	@GetMapping("/income-type")
 	public String showIncomeTypes(Model model) {
@@ -161,13 +162,17 @@ public class IncomeController {
 
 		try {
 			String fileName = StringUtils.cleanPath(income.getBillFile().getOriginalFilename());
-			if(fileName.contains("..")) System.out.println("Not a a valid file");
+			if(!"".equals(fileName)) {
+				String incomeBillFileName = "Bill_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + "_" + fileName;
+				Path path = Paths.get(incomeBillPath + incomeBillFileName);
+				Files.copy(income.getBillFile().getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
-			String incomeBillFileName = "Bill_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + "_" + fileName;
-			Path path = Paths.get(incomeBillPath + incomeBillFileName);
-			Files.copy(income.getBillFile().getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+				if(income.getBillFileName() != null && !"".equals(income.getBillFileName())) {
+					Files.delete(Paths.get(incomeBillPath + income.getBillFileName()));
+				}
 
-			income.setBillFileName(incomeBillFileName);
+				income.setBillFileName(incomeBillFileName);
+			}
 
 		} catch (IOException e) {
 			System.out.println("Exception while saving income bill file in local - " + e.getMessage());
@@ -194,11 +199,14 @@ public class IncomeController {
 	public String deleteIncome(RedirectAttributes redirectAttributes, @RequestParam("id") Long id) throws IOException {
 
 		System.out.println("Got delete request for income id " + id);
-		Path path = Paths.get(incomeBillPath + incomeService.findIncomeById(id).getBillFileName());
-
+		String billFileName = incomeService.findIncomeById(id).getBillFileName();
+		try {
+			if(billFileName != null && !billFileName.equals("")) Files.delete(Paths.get(incomeBillPath + billFileName));
+		} catch(Exception e) {
+			System.out.println("Bill file not found with name - " + billFileName);
+		}
+		
 		incomeService.deleteIncomeById(id);
-		Files.delete(path);
-
 		redirectAttributes.addFlashAttribute("successMessage", "Income record deleted successfully!");
 		return "redirect:/income";
 
@@ -208,8 +216,7 @@ public class IncomeController {
 	public ResponseEntity<Resource> downloadFileFromLocal(@PathVariable String type1, @PathVariable String type2, @PathVariable String fileName) {
 		System.out.println("Received download request for " + type1 + " " + type2 + " - " + fileName);
 
-		String fileBasePath = "/files/hunter/" + type1 + "/" + type2 + "/";
-		System.out.println("#########File path: " + fileBasePath + fileName);
+		String fileBasePath = downloadBasePath + type1 + "/" + type2 + "/";
 		Path path = Paths.get(fileBasePath + fileName);
 		Resource resource = null;
 		try {

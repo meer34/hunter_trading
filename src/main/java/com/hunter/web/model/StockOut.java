@@ -33,7 +33,6 @@ public class StockOut {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	private String gst;
 	private String remarks;
 	private Integer totalQuantity;
 	private Double totalPrice;

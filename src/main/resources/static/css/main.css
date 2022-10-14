@@ -2028,3 +2028,21 @@ audio, canvas, progress, video {
     margin-top: 8px;
 }
 
+.downloadBtn {
+  background-color: #2a3492;
+  margin-top: 26px !important;
+  margin-top: 26px !important;
+  border: none;
+  color: white;
+  padding: 10px 30px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+@media(max-width : 768px){
+.downloadBtn {
+	margin-top: 3px !important;
+	margin-bottom: 6px;
+	width: 100%;
+}
+}

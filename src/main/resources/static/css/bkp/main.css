@@ -1218,7 +1218,7 @@ li{
   color: #fff;
 }
 .app-menu__product.active, .app-menu__product:hover, .app-menu__product:focus {
-  background: #037777;
+  background: #0b6400;
   border-left-color: #0d0d0d;
   text-decoration: none;
   color: #fff;
@@ -1502,7 +1502,7 @@ li{
     -moz-box-shadow: none !important;
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
-    border: 1px solid #037777;
+    border: 1px solid #0b6400;
     transition: All 0.5s ease-in;
     -webkit-transition: All 0.5s ease-in;
     -moz-transition: All 0.5s ease-in;
@@ -1512,7 +1512,7 @@ li{
 /*buttons*/
 .dashboardicon .action-button {
   width: auto;
-  background: #037777;
+  background: #0b6400;
   font-weight: bold;
   color: white;
   border: 0 none;
@@ -1523,14 +1523,14 @@ li{
 }
 
 .dashboardicon .action-button:hover, .dashboardicon .action-button:focus {
-    box-shadow: 0 0 0 2px white, 0 0 0 3px #037777;
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #0b6400;
 }
 
 .dashboardicon .action-button-previous {
   width: auto;
   background: #b5ffff;
   font-weight: bold;
-  color: #037777;
+  color: #0b6400;
   border: 0 none;
   border-radius: 25px;
   cursor: pointer;
@@ -1616,7 +1616,7 @@ margin-top:10px;
 }
 .dashboardicon2 .action-button {
   width: auto;
-  background: #037777;
+  background: #0b6400;
   font-weight: bold;
   color: white;
   border: 0 none;
@@ -1630,7 +1630,7 @@ margin-top:10px;
 /*buttons*/
 .dashboardicon2 .action-button {
   width: auto;
-  background: #037777;
+  background: #0b6400;
   font-weight: bold;
   color: white;
   border: 0 none;
@@ -1647,14 +1647,14 @@ margin-top:10px;
 }
 
 .dashboardicon2 .action-button:hover, .dashboardicon2 .action-button:focus {
-    box-shadow: 0 0 0 2px white, 0 0 0 3px #037777;
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #0b6400;
 }
 
 .dashboardicon2 .action-button-previous {
   width: auto;
   background: transparent;
   font-weight: bold;
-  color: #037777;
+  color: #0b6400;
   border: 0 none;
   border-radius: 25px;
   cursor: pointer;
@@ -1817,7 +1817,7 @@ margin-top:10px;
 }
 .dashboardicon2 .action-button {
   width: auto;
-  background: #037777;
+  background: #0b6400;
   font-weight: bold;
   color: white;
   border: 0 none;
@@ -1938,12 +1938,12 @@ margin-top:10px;
   width: 100%;
 }
 .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
-  background-color: #199999 !important;
-  border-color: #199999 !important;
+  background-color: #0b6400 !important;
+  border-color: #0b6400 !important;
   color: #fff !important;
 }
 .pagination > li > a, .pagination > li > span {
-  color: #199999 !important;
+  color: #0b6400 !important;
 }
 .pagination {
   margin: 0 !important;

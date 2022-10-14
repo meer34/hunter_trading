@@ -33,32 +33,67 @@
 								<input type="text" class="form-control" name="remarks" id="remarks" placeholder="Remarks" th:value="${stockIn?.remarks}">
 							</div>
 						</div>
+						
+						
+						<div class="clearfix"></div>
+						<div class="row addProduct">
+						<div class="col-lg-12 flexdisplay">
+							<div class="col-lg-12">
+								<label>Product Details Entry</label>
+							</div>
+						</div>
+						<div class="col-lg-12 flexdisplay">
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input type="text" id="scanCode" placeholder="Scan Code" autocomplete="off" >
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input type="text" class="form-control" id="productName" placeholder="Product Name">
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input type="text" class="form-control" id="size" placeholder="Size">
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input type="text" class="form-control" id="colour" placeholder="Colour">
+							</div>
+						</div>
+						<div class="col-lg-12 flexdisplay">
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input type="text" class="form-control" id="brand" placeholder="Brand">
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="quantityOuter">
+								<input type="number" class="form-control" id="quantity" placeholder="Quantity" onChange="calculateAmount()">
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input type="number" class="form-control" id="rate" placeholder="Rate" onChange="calculateAmount()">
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input type="number" class="form-control" id="amount" placeholder="Amount" readonly>
+							</div>
+						</div>
+						<div class="col-lg-12 flexdisplay">
+							<div class="col-lg-12">
+								<input type ="button" style="background-color: #0b6400; color: #FFF;width: auto;padding: 10px 15px;" value="Add Product" id="addStockInPartBtn">
+							</div>
+						</div>
+						</div>
+						
+						
 						<div class="table-responsive table_size" style="margin-top: 50px;">
 							<table class="table table-bordered table-responsive table-hover" style="width: 100%;" id="productTable" >
-							<thead id="myHeader" class="thead-inverse" style="background-color: #0b6400; color: #FFF;">
-								<tr>
-									<th colspan="9" class="table_heading">Select Product</th>
+							<thead class="thead-inverse">
+								<tr style="background-color: #0b6400; color: #FFF;">
+									<th>Scan Code</th>
+									<th style="width: 20%;">Product Name</th>
+									<th>Size</th>
+									<th>Colour</th>
+									<th>Brand</th>
+									<th>Quantity</th>
+									<th>Rate</th>
+									<th>Amount</th>
+									<th>Action</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr style="background-color: #FFF">
-									<td>
-										<input type="text" id="scanCode" placeholder="Scan Code" autocomplete="off" >
-										<input type="button" name="stockInScan" id="scanCodeBtn" value="Scan">
-									</td>
-									<td style="width: 20%;"><input type="text" class="form-control" id="productName" placeholder="Product Name"> </td>
-									<td> <input type="text" class="form-control" id="size" placeholder="Size"> </td>
-									<td> <input type="text" class="form-control" id="colour" placeholder="Colour"> </td>
-									<td> <input type="text" class="form-control" id="brand" placeholder="Brand"> </td>
-									<td> <input type="text" class="form-control" id="quantity" placeholder="Quantity" onChange="calculateAmount()"> </td>
-									<td> <input type="text" class="form-control" id="rate" placeholder="Rate" onChange="calculateAmount()"> </td>
-									<td> <input type="text" class="form-control" id="amount" placeholder="Amount"> </td>
-									<td style="width: 8%;">
-										<div class="dashboardicon2" style="text-align: left;">
-											<i class="fa fa-plus buttonNew" id="addStockInPartBtn"></i>
-										</div>
-									</td>
-								</tr>
 								<tr style="background-color: #FFF" th:each="product : ${stockIn?.productList}">
 									<td th:text="${product?.scanCode}" />
 									<td style="width: 20%;" th:text="${product?.name}" />
@@ -89,7 +124,6 @@
 		
     </main>
 	
-	<div th:replace="fragments :: scan_qr_modal"></div>
 	<div th:replace="fragments :: main_scripts"></div>
 	<div th:replace="fragments :: add_edit_scripts"></div>
    </body>

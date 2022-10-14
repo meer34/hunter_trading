@@ -69,7 +69,8 @@ function onColourChange(colour) {
 
 function setMaxQuantity(productId) {
 	
-	var quantityTag = `<input type="text" class="form-control" id="quantity" placeholder="Quantity" onChange="calculateAmount()">`;
+	var quantityTagPrefix = `<input type="number" class="form-control" id="quantity" placeholder="Quantity`;
+	var quantityTagSuffix = `" onChange="calculateAmount()">`;
 	var maxQuantityTag = `<input type="hidden" id="maxQuantity" value=`;
 
 	if (productId) {
@@ -77,11 +78,11 @@ function setMaxQuantity(productId) {
 			url : '/loadMaxQuantityForProduct',
 			data : { "productId" : productId },
 			success : function(result) {
-				$('#quantityOuter').html(quantityTag + maxQuantityTag + result + `>`);
+				$('#quantityOuter').html(quantityTagPrefix + `(`+ result + ` available)` + quantityTagSuffix + maxQuantityTag + result + `>`);
 			}
 		});
 	}
 	//reset data
-	$('#quantityOuter').html(quantityTag + maxQuantityTag + `"0">`);
+	$('#quantityOuter').html(quantityTagPrefix + quantityTagSuffix + maxQuantityTag + `"0">`);
 }
 
