@@ -50,13 +50,14 @@ public class StockInController {
 			@RequestParam(value="name", required = false) String name,
 			@RequestParam(value="pSize", required = false) String pSize,
 			@RequestParam(value="colour", required = false) String colour,
-			@RequestParam(value="brand", required = false) String brand) throws ParseException {
+			@RequestParam(value="brand", required = false) String brand,
+			@RequestParam(value="productType", required = false) String productType) throws ParseException {
 
 		Page<StockIn> listPage = null;
 
 		if(keyword == null && fromDate == null && toDate == null) {
 			System.out.println("StockIn home page");
-			if(name != null) listPage = stockInService.getAllStockInsForProduct(name, pSize, colour, brand, page.orElse(1) - 1, size.orElse(initialPageSize));
+			if(name != null) listPage = stockInService.getAllStockInsForProduct(name, pSize, colour, brand, productType, page.orElse(1) - 1, size.orElse(initialPageSize));
 			else listPage = stockInService.getAllStockIns(page.orElse(1) - 1, size.orElse(initialPageSize));
 
 		} else {
@@ -163,6 +164,15 @@ public class StockInController {
 		System.out.println("Searching brands for product colour - " + colour);
 		return new Gson().toJson(stockInService.getBrandsForNameAndSizeAndColour(name, size, colour));
 	}
+	
+	@RequestMapping(value = "/loadProductTypesByProductNameAndSizeAndColourAndBrand",
+			method = RequestMethod.GET)
+	@ResponseBody
+	public String loadProductTypesByProductNameAndSizeAndColourAndBrand(@RequestParam String name, 
+			@RequestParam String size, @RequestParam String colour, @RequestParam String brand) {
+		System.out.println("Searching product types for product brand - " + brand);
+		return new Gson().toJson(stockInService.getProductTypesForNameAndSizeAndColourAndBrand(name, size, colour, brand));
+	}
 
 	@RequestMapping(value = "/loadMaxQuantityForProduct",
 			method = RequestMethod.GET)
@@ -188,10 +198,14 @@ public class StockInController {
 			data.add(product.getSize());
 			data.add(product.getColour());
 			data.add(product.getBrand());
+			data.add(product.getProductType());
+			data.add(product.getProductCode());
+			data.add(product.getMrp());
+			data.add(product.getSellRate());
 			data.add(stockInService.getQuantityForProductId(product.getId()));
+			return new Gson().toJson(data);
 		}
-		
-		return new Gson().toJson(data);
+		return null;
 	}
 
 

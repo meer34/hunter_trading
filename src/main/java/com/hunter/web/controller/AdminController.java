@@ -12,7 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hunter.web.model.Admin;
 import com.hunter.web.model.User;
-import com.hunter.web.repo.UserRepository;
+import com.hunter.web.repo.UserRepo;
 import com.hunter.web.service.AdminService;
 import com.hunter.web.service.ModeratorService;
 
@@ -21,7 +21,7 @@ public class AdminController {
 
 	@Autowired AdminService adminService;
 	@Autowired ModeratorService moderatorService;
-	@Autowired UserRepository userRepository;
+	@Autowired UserRepo userRepository;
 
 	@GetMapping("/admin")
 	public String showAdminPage(Model model) {

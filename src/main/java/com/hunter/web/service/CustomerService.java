@@ -29,5 +29,25 @@ public class CustomerService {
 	public void deleteUserById(Long id) {
 		customerRepo.deleteById(id);
 	}
+	
+	public List<Customer> findAllNotSyncedData() {
+		return customerRepo.findAllNotSyncedData();
+	}
+	
+	public Customer saveRemoteData(Customer customer) {
+		customer.setSynced(true);
+		
+		Long tempCustomerId = customer.getId();
+		if(customer.getRemoteId() != null) customer.setId(customer.getRemoteId());
+		else customer.setId(0L);
+		customer.setRemoteId(tempCustomerId);
+		
+		System.out.println("Saving Customer with id: " + customer.getId() + " remote id: " + customer.getRemoteId());
+		return customerRepo.saveAndFlush(customer);
+	}
+
+	public void markAsSynced(Long id, Long serverId) {
+		customerRepo.markAsSynced(id, serverId);
+	}
 
 }

@@ -10,18 +10,18 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="dashboardicon2" style="text-align: left;">
-					<input type="button" name="addCustomer" class="submit action-button" value="Add New Party" th:attr="onclick=|location.href='@{/add-party-page}'|" >
+					<input type="button" name="addCustomer" class="submit action-button" value="Add New Manufacturer" th:attr="onclick=|location.href='@{/add-party-page}'|" >
 				</div>
 				
 				<div th:if="${successMessage}" th:text="${successMessage}" class="alert alert-success" role="alert"></div>
 				
 				<div class="tile">
-					<h3 class="tile-title">Party</h3>
+					<h3 class="tile-title">Manufacturer</h3>
 					<form class="dashboardicon">
 
 						<div class="form-group col-lg-12">
 							<div class="col-lg-12">
-								<input type="text" name="searchParty" id="searchTable" placeholder="Search Party">
+								<input type="text" name="searchParty" id="searchTable" placeholder="Search Manufacturer">
 							</div>
 						</div>
 					</form>

@@ -20,25 +20,31 @@ public interface ProductRepo extends JpaRepository<Product, Long>{
 	@Query("SELECT DISTINCT colour FROM Product where name = :name AND size = :size")
 	List<String> findColoursForNameAndSize(String name,String size);
 
-	@Query("SELECT id, brand FROM Product where name = :name AND size = :size AND colour = :colour")
-	List<String[]> findBrandsForNameAndSizeAndColour(String name,String size, String colour);
-
-	@Query("SELECT SUM(p.quantity) - COALESCE(SUM(sop.quantity), 0) FROM Product p LEFT JOIN StockOutProduct sop ON p.id = sop.stockInProduct "
-			+ "WHERE p.id = :productId")
-	String findQuantityForProductId(Long productId);
-
-	@Modifying
-	@Transactional
-	@Query("delete FROM Product p where p.stockIn = (FROM StockIn si where si.id = :stockInId) AND p.id NOT IN :currentChildIds "
-			+ "AND NOT EXISTS (SELECT 1 FROM StockOutProduct sop where sop.stockInProduct = p.id)") //sop.name = p.name AND sop.size = p.size AND sop.colour = p.coolour AND sop.brand = p.brand
-	void deleteStockInOrphanChilds(Long stockInId, List<Long> currentChildIds);
-
-	@Modifying
-	@Transactional
-	@Query("delete FROM StockOutProduct sop where sop.stockOut = (FROM StockOut so where so.id = :stockOutId) AND sop.id NOT IN :currentChildIds")
-	void deleteStockOutOrphanChilds(long stockOutId, List<Long> currentChildIds);
+	@Query("SELECT DISTINCT brand FROM Product where name = :name AND size = :size AND colour = :colour")
+	List<String> findBrandsForNameAndSizeAndColour(String name,String size, String colour);
 	
+	@Query("SELECT id, productType FROM Product where name = :name AND size = :size AND colour = :colour AND brand = :brand")
+	List<String[]> findProductTypesForNameAndSizeAndColourAndBrand(String name,String size, String colour, String brand);
+
+//	@Query("SELECT p.quantity - COALESCE(SUM(Product.stockOutProductList.quantity), 0) FROM Product p WHERE p.id = :productId")
+//	String findQuantityForProductId(Long productId);
+
+	@Query("FROM Product p where p.stockIn = (FROM StockIn si where si.id = :stockInId) AND p.id NOT IN :currentChildIds "
+			+ "AND NOT EXISTS (SELECT 1 FROM StockOutProduct sop where sop.stockInProduct = p.id)")
+	List<Product> getStockInOrphanChilds(Long stockInId, List<Long> currentChildIds);
+
 	Product findFirstByScanCodeOrderByIdDesc(String scanCode);
+	
+	@Query("FROM Product p WHERE p.synced = FALSE")
+	List<Product> findAllNotSyncedData();
+	
+	@Modifying(clearAutomatically=true, flushAutomatically=true)
+	@Transactional
+	@Query("UPDATE Product p SET p.synced = TRUE, p.remoteId = :remoteId WHERE p.id = :id")
+	void markAsSynced(Long id, Long remoteId);
+	
+	@Query("FROM Product p where p.stockIn = (FROM StockIn si where si.id = :stockInId)")
+	List<Product> findAllByStockInId(Long stockInId);
 
 
 }

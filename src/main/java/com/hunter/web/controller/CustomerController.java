@@ -74,10 +74,17 @@ public class CustomerController {
 			@RequestParam("id") String id) throws Exception{
 
 		System.out.println("Got delete request for customer id " + id);
-		customerService.deleteUserById(Long.parseLong(id));
-		redirectAttributes.addFlashAttribute("successMessage", "Customer with id " + id + " deleted successfully!");
-		return "redirect:/customer";
+		Customer customer = customerService.findUserById(Long.parseLong(id));
 		
+		if(customer != null) {
+			if(customer.getStockOutList().isEmpty()) {
+				customerService.deleteUserById(Long.parseLong(id));
+				redirectAttributes.addFlashAttribute("successMessage", "Customer with id " + id + " deleted successfully!");
+			} else {
+				redirectAttributes.addFlashAttribute("successMessage", customer.getStockOutList().size() + " Stock Out entries present this customer");
+			}
+		}
+		return "redirect:/customer";
 	}
 
 }

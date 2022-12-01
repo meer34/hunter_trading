@@ -17,7 +17,7 @@
 							<input type="text" class="form-control" name="billNo" id="billNo" th:value="${stockIn?.billNo}">
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-							<label>Mahajan Name</label>
+							<label>Manufacturer Name</label>
 							<input type="text" class="form-control" name="mahajan" id="mahajan" th:value="${stockIn?.mahajan?.name}">
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -33,7 +33,7 @@
 						<table class="table table-bordered table-responsive table-hover" style="width: 100%;" id="productTable" >
 							<thead id="myHeader" class="thead-inverse" style="background-color: #0b6400; color: #FFF;">
 								<tr>
-									<th colspan="8" class="table_heading">Products</th>
+									<th colspan="12" class="table_heading">Products</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -43,6 +43,10 @@
 									<td>Size</td>
 									<td>Colour</td>
 									<td>Brand</td>
+									<th>Product Type</th>
+									<th>Product Code</th>
+									<th>MRP</th>
+									<th>Sell Rate</th>
 									<td>Quantity</td>
 									<td>Rate</td>
 									<td>Amount</td>
@@ -53,6 +57,10 @@
 									<td th:text="${product?.size}" />
 									<td th:text="${product?.colour}" />
 									<td th:text="${product?.brand}" />
+									<td th:text="${product?.productType}" />
+									<td th:text="${product?.productCode}" />
+									<td th:text="${product?.mrp}" />
+									<td th:text="${product?.sellRate}" />
 									<td th:text="${product?.quantity}" />
 									<td th:text="${product?.rate}" />
 									<td th:text="${product?.amount}" />

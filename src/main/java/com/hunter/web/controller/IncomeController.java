@@ -164,6 +164,7 @@ public class IncomeController {
 			String fileName = StringUtils.cleanPath(income.getBillFile().getOriginalFilename());
 			if(!"".equals(fileName)) {
 				String incomeBillFileName = "Bill_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + "_" + fileName;
+				Files.createDirectories(Paths.get(incomeBillPath));
 				Path path = Paths.get(incomeBillPath + incomeBillFileName);
 				Files.copy(income.getBillFile().getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 

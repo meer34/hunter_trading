@@ -3,6 +3,7 @@ function onProductChange(productName) {
 	var sizeTag = '<option selected disabled="disabled" value="">Size</option>';
 	var colourTag = '<option selected disabled="disabled" value="">Colour</option>';
 	var brandTag = '<option selected disabled="disabled" value="">Brand</option>';
+	var productTag = '<option selected disabled="disabled" value="">Product Type</option>';
 	if (productName) {
 		$.ajax({
 			url : '/loadSizesByProductName',
@@ -20,12 +21,14 @@ function onProductChange(productName) {
 	$('#sizes').html(sizeTag);
 	$('#colours').html(colourTag);
 	$('#brands').html(brandTag);
+	$('#productTypes').html(productTag);
 }
 
 function onSizeChange(size) {
 	var name = document.getElementById("productNames").value;
 	var colourTag = '<option selected disabled="disabled" value="">Colour</option>';
 	var brandTag = '<option selected disabled="disabled" value="">Brand</option>';
+	var productTag = '<option selected disabled="disabled" value="">Product Type</option>';
 	if (size) {
 		$.ajax({
 			url : '/loadColoursByProductNameAndSize',
@@ -43,12 +46,14 @@ function onSizeChange(size) {
 	//reset data
 	$('#colours').html(colourTag);
 	$('#brands').html(brandTag);
+	$('#productTypes').html(productTag);
 }
 
 function onColourChange(colour) {
 	var name = document.getElementById("productNames").value;
 	var size = document.getElementById("sizes").value;
 	var brandTag = '<option selected disabled="disabled" value="">Brand</option>';
+	var productTag = '<option selected disabled="disabled" value="">Product Type</option>';
 	if (colour) {
 		$.ajax({
 			url : '/loadBrandsByProductNameAndSizeAndColour',
@@ -56,7 +61,7 @@ function onColourChange(colour) {
 			success : function(result) {
 				var result = JSON.parse(result);
 				for (var i = 0; i < result.length; i++) {
-					brandTag += '<option value="' + result[i][0] + '">'+ result[i][1]+ '</option>';
+					brandTag += '<option value="' + result[i] + '">'+ result[i]+ '</option>';
 				}
 				$('#brands').html(brandTag);
 			}
@@ -65,6 +70,30 @@ function onColourChange(colour) {
 	}
 	//reset data
 	$('#brands').html(brandTag);
+	$('#productTypes').html(productTag);
+}
+
+function onBrandChange(brand) {
+	var name = document.getElementById("productNames").value;
+	var size = document.getElementById("sizes").value;
+	var colour = document.getElementById("colours").value;
+	var productTag = '<option selected disabled="disabled" value="">Product Type</option>';
+	if (brand) {
+		$.ajax({
+			url : '/loadProductTypesByProductNameAndSizeAndColourAndBrand',
+			data : { "name" : name, "size" : size, "colour" : colour, "brand" : brand },
+			success : function(result) {
+				var result = JSON.parse(result);
+				for (var i = 0; i < result.length; i++) {
+					productTag += '<option value="' + result[i][0] + '">'+ result[i][1]+ '</option>';
+				}
+				$('#productTypes').html(productTag);
+			}
+		});
+
+	}
+	//reset data
+	$('#productTypes').html(productTag);
 }
 
 function setMaxQuantity(productId) {

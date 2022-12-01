@@ -1,13 +1,15 @@
 package com.hunter.web.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+
+import com.hunter.data.controller.DeleteEventListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,21 +19,25 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
+@EntityListeners(DeleteEventListener.class)
 public class StockOutProduct {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@Column(updatable=false)
+	private Long remoteId;
+	private boolean synced;
 
 	private long stockInProduct;
 	private int quantity;
 	private double rate;
 	private double amount;
 
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name="product")
 	private Product product;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name="stockOut")
 	private StockOut stockOut;
 

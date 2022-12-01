@@ -2,7 +2,9 @@ package com.hunter.web.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +18,10 @@ import javax.persistence.Transient;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hunter.data.controller.DeleteEventListener;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -24,12 +30,16 @@ import lombok.ToString;
 @Setter
 @ToString
 @Entity
+@EntityListeners(DeleteEventListener.class)
 public class Income {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@Column(updatable=false)
+	private Long remoteId;
+	private boolean synced;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name="incomeType")
 	private IncomeType incomeType;
 	
@@ -45,9 +55,11 @@ public class Income {
 	
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern="yyyy-MM-dd")
 	private Date date;
 	
 	@Transient
+	@JsonIgnore
 	private MultipartFile billFile;
 	private String billFileName;
 	

@@ -30,10 +30,10 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="col-lg-12 logo_style" style="padding: 0 25px;">
-              <p style="font-size: 22px; margin-top: 10px;">HUNTER Garments<span class="pull-right" style="font-size:16px !important;" th:text="${'Bill No. :' + stockOut.billNo}"></span></p>
+              <p style="font-size: 22px; margin-top: 10px;">HUNT-R TRADING COMPANY<span class="pull-right" style="font-size:16px !important;" th:text="${'Bill No. :' + stockOut.billNo}"></span></p>
               <p><span class="pull-left">Sold By:<br/><br/>Khidirpur, Kolkata, <br/>
-                West Bengal 700023
-                India</span>  <span class="pull-right">Billing Address :<br/><br/>
+                West Bengal 700023 India<br/>
+                <span th:text="${'Contact: ' + contact}"></span></span>  <span class="pull-right">Billing Address :<br/><br/>
                 Name: <span th:text="${stockOut.customer?.name}" /><br/>
                 Address: <span th:text="${stockOut.customer?.address}" /><br/>
                 Party State Code: <u th:text="${stockOut.customer?.stateCode}" /><br/>
@@ -52,6 +52,7 @@
                   <tr class="tdcolor">
                     <th>Sl No.</th>
                     <th>PRODUCT</th>
+                    <th>PRODUCT CODE</th>
                     <th>HSN CODE</th>
                     <th>RATE</th>
                     <th>QUANTITY</th>
@@ -60,6 +61,7 @@
                   <tr th:each="product, iterator : ${stockOut.productList}">
                     <td scope="row" th:text="${iterator.count}" />
                     <td th:text="${product?.product?.name}" />
+                    <td th:text="${product?.product?.productCode}" />
 					<td th:text="${stockOut.hsnCode}" />
                     <td th:text="${product.rate}" />
                     <td th:text="${product.quantity}" />
@@ -71,7 +73,7 @@
                   </colgroup>
                   <tr>
                     <td rowspan="10" colspan="3">PAYMENT MODE:  BANK<br/><br/>
-                      IN WORD: (TWO THOUSAND ONLY)
+                      IN WORD: (<span th:text="${paidAmtInText}"></span>)
                     </td>
                   </tr>
                   <tr>

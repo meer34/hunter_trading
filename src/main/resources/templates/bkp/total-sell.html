@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <head th:replace="fragments :: html_head" />
+  <body class="app sidebar-mini rtl">
+    <div th:replace="fragments :: app-layout"></div>
+	
+    <main class="app-content">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="dashboardicon2" style="text-align: left;">
+              <div class="tile">
+                <h3 class="tile-title">Total Sell</h3>
+                <div class="col-lg-12 dashboardicon" style="text-align: left;">
+                    <label>Search</label>
+                    <input type="text" name="keyword" id="searchTable" placeholder="Search"><!--search by sort no or roll no)-->
+                </div>
+                <div class="table-responsive table_size" style="margin-top: 50px;">
+                	<div class="dashboardicon2" style="text-align: left; margin-top: 10px; margin-bottom:2px;">
+                      <input type="button" name="action" class="submit action-button" value="Print" onclick="printData()" >
+                    </div>
+                    <table class="table table-bordered table-responsive table-hover" style="width: 100%;" id="printTable" >
+                      <thead class="thead-inverse" style="background-color: #0b6400; color: #FFF;">
+                        <tr>
+                          <th class="table_heading">Product Name</th>
+                          <th class="table_heading">Size</th>
+                          <th class="table_heading">Colour</th>
+                          <th class="table_heading">Brand</th>
+                          <th class="table_heading">Quantity</th>
+                          <th class="table_heading" style="width: 19%">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr style="background-color: #FFF" th:each="totalSale : ${totalSaleList}" >
+                          <td th:text="${totalSale.productName}" />
+                          <td th:text="${totalSale.size}" />
+                          <td th:text="${totalSale.colour}" />
+                          <td th:text="${totalSale.brand}" />
+                          <td th:text="${totalSale.quantity}" />
+                          <td>
+                          	<div class="dashboardicon2" style="text-align: middle;">
+                      			<input type="button" name="action" class="submit action-button" value="View" style=" border-radius: 0;"
+                      				th:attr="onclick=|location.href='stock-out?name=${totalSale.productName}&pSize=${totalSale.size}&colour=${totalSale.colour}&brand=${totalSale.brand}'|" >
+                    		</div>
+                    	   </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <div th:replace="fragments :: main_scripts"></div>
+      <div th:replace="fragments :: table_search_script"></div>
+  </body>
+</html>

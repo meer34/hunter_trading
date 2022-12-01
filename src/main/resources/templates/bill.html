@@ -21,8 +21,15 @@
                 <div class="table-responsive table_size" style="margin-top: 50px;">
                   <form th:action="@{/stock-out}" method="get">
                     <div class="dashboardicon2" style="text-align: left;" ><!--th:if="${orderList.size() > 0}"-->
-                      <input type="submit" th:formaction="@{/viewStockOut}" name="action" class="submit action-button" value="View">
-                      <input type="button" name="action" class="submit action-button" value="Print" onclick="printBill()">
+                      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 pull-bottom">
+                      	<input type="submit" th:formaction="@{/viewStockOut}" name="action" class="submit action-button" value="View">
+                      	<input type="button" name="action" class="submit action-button" value="Print" onclick="printBill()">
+                      </div>
+                      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 pull-right">
+                      	<select class="form-control contact-select" id="contact" multiple >
+							<option style="color: #333;" th:each="admin : ${admins}" th:text="${admin.phone}" th:value="${admin.phone}"></option>
+                     	 </select>
+                      </div>
                     </div>
                     <table class="table table-bordered table-responsive table-hover" style="width: 100%;" id="printTable" >
                       <thead class="thead-inverse"

@@ -26,7 +26,8 @@
                           <th class="table_heading">Size</th>
                           <th class="table_heading">Colour</th>
                           <th class="table_heading">Brand</th>
-                          <th class="table_heading">Total Product</th>
+                          <th class="table_heading">Product Type</th>
+                          <th class="table_heading">Stock In Entries</th>
                           <th class="table_heading">Quantity</th>
                           <th class="table_heading" style="width: 19%">Action</th>
                         </tr>
@@ -37,14 +38,15 @@
                           <td th:text="${totalStock.size}" />
                           <td th:text="${totalStock.colour}" />
                           <td th:text="${totalStock.brand}" />
+                          <td th:text="${totalStock.productType}" />
                           <td th:text="${totalStock.totalProductCount}" />
                           <td th:text="${totalStock.totalQuantity}" />
                           <td>
 							<div class="dashboardicon2">
 								<input type="button" class="submit action-button" value="Stock Ins" style=" border-radius: 0;"
-									th:attr="onclick=|location.href='stock-in?name=${totalStock.name}&pSize=${totalStock.size}&colour=${totalStock.colour}&brand=${totalStock.brand}'|" >
+									th:attr="onclick=|location.href='stock-in?name=${totalStock.name}&pSize=${totalStock.size}&colour=${totalStock.colour}&brand=${totalStock.brand}&productType=${totalStock.productType}'|" >
 								<input type="button" class="submit action-button" value="Stock Outs" style=" border-radius: 0;"
-									th:attr="onclick=|location.href='stock-out?name=${totalStock.name}&pSize=${totalStock.size}&colour=${totalStock.colour}&brand=${totalStock.brand}'|" >
+									th:attr="onclick=|location.href='stock-out?name=${totalStock.name}&pSize=${totalStock.size}&colour=${totalStock.colour}&brand=${totalStock.brand}&productType=${totalStock.productType}'|" >
 							</div>
 						  </td>
                         </tr>

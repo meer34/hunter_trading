@@ -14,8 +14,9 @@ public class PartyService {
 	@Autowired
 	private PartyRepo partyRepo;
 
-	public Party saveUserToDB(Party admin) {
-		return partyRepo.save(admin);
+	public Party saveUserToDB(Party party) {
+		party.setSynced(false);
+		return partyRepo.save(party);
 	}
 	
 	public Party findUserById(Long id) {
@@ -28,6 +29,26 @@ public class PartyService {
 
 	public void deleteUserById(Long id) {
 		partyRepo.deleteById(id);
+	}
+	
+	public List<Party> findAllNotSyncedData() {
+		return partyRepo.findAllNotSyncedData();
+	}
+
+	public Party saveRemoteData(Party party) {
+		party.setSynced(true);
+		
+		Long tempPartyId = party.getId();
+		if(party.getRemoteId() != null) party.setId(party.getRemoteId());
+		else party.setId(0L);
+		party.setRemoteId(tempPartyId);
+		
+		System.out.println("Saving party with id: " + party.getId() + " remote id: " + party.getRemoteId());
+		return partyRepo.saveAndFlush(party);
+	}
+
+	public void markAsSynced(Long id, Long serverId) {
+		partyRepo.markAsSynced(id, serverId);
 	}
 
 }

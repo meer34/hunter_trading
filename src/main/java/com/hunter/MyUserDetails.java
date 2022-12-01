@@ -54,11 +54,9 @@ public class MyUserDetails implements UserDetails {
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		if(user.isOtpNonExpired(30L)) {
-			System.out.println("Entered OTP for " + user.getPhone() + " has expired!");
-			return true;
-			
-		} else return false;
+		if(user.isOtpNonExpired(30L)) return true;
+		System.out.println("Entered OTP for " + user.getPhone() + " has expired!");
+		return false;
 	}
 
 	@Override

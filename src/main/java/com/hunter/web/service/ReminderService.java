@@ -46,5 +46,25 @@ public class ReminderService {
 	public void deleteReminderById(Long id) {
 		reminderRepo.deleteById(id);
 	}
+	
+	public List<Reminder> findAllNotSyncedData() {
+		return reminderRepo.findAllNotSyncedData();
+	}
+
+	public Reminder saveRemoteData(Reminder reminder) {
+		reminder.setSynced(true);
+		
+		Long tempReminderId = reminder.getId();
+		if(reminder.getRemoteId() != null) reminder.setId(reminder.getRemoteId());
+		else reminder.setId(0L);
+		reminder.setRemoteId(tempReminderId);
+		
+		System.out.println("Saving Reminder with id: " + reminder.getId() + " remote id: " + reminder.getRemoteId());
+		return reminderRepo.saveAndFlush(reminder);
+	}
+
+	public void markAsSynced(Long id, Long serverId) {
+		reminderRepo.markAsSynced(id, serverId);
+	}
 
 }

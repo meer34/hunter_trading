@@ -8,7 +8,7 @@
     <main class="app-content">
          <div class="row">
 			<div class="col-md-12">
-				<form class="dashboardicon" style="margin-top: 0; text-align: left;" th:action="@{saveStockOut}" method="post" enctype="multipart/form-data">
+				<form class="dashboardicon" id="stockOutForm" style="margin-top: 0; text-align: left;" th:action="@{saveStockOut}" method="post" enctype="multipart/form-data">
 				<fieldset style="margin-top: 0;">
 					<legend style="text-align:center; padding-bottom: 60px;" th:text="${header}"></legend>
 					<div id="tab1">
@@ -63,9 +63,25 @@
 						</div>
 						<div class="col-lg-12 flexdisplay">
 							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-								<select class="form-control" id="brands" style="height: 48px;" onchange="setMaxQuantity(this.value)">
+								<select class="form-control" id="brands" style="height: 48px;" onchange="onBrandChange(this.value)">
 									<option selected disabled="disabled" value="">Brand</option>
 								</select>
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<select class="form-control" id="productTypes" style="height: 48px;" onchange="setMaxQuantity(this.value)">
+									<option selected disabled="disabled" value="">Product Type</option>
+								</select>
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input type="text" class="form-control" id="productCode" placeholder="Product Code" readonly>
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input type="text" class="form-control" id="mrp" placeholder="MRP" readonly>
+							</div>
+						</div>
+						<div class="col-lg-12 flexdisplay">
+							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input type="number" class="form-control" id="sellRate" placeholder="Sell Rate" readonly>
 							</div>
 							<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="quantityOuter">
 								<input type="number" class="form-control" id="quantity" placeholder="Quantity" onChange="calculateAmount()">
@@ -92,6 +108,10 @@
 									<th>Size</th>
 									<th>Colour</th>
 									<th>Brand</th>
+									<th>Product Type</th>
+									<th>Product Code</th>
+									<th>MRP</th>
+									<th>Sell Rate</th>
 									<th>Quantity</th>
 									<th>Rate</th>
 									<th>Amount</th>
@@ -104,6 +124,10 @@
 									<td th:text="${stockOutProduct?.product?.size}" />
 									<td th:text="${stockOutProduct?.product?.colour}" />
 									<td th:text="${stockOutProduct?.product?.brand}" />
+									<td th:text="${stockOutProduct?.product?.productType}" />
+									<td th:text="${stockOutProduct?.product?.productCode}" />
+									<td th:text="${stockOutProduct?.product?.mrp}" />
+									<td th:text="${stockOutProduct?.product?.sellRate}" />
 									<td th:text="${stockOutProduct?.quantity}" />
 									<td th:text="${stockOutProduct?.rate}" />
 									<td th:text="${stockOutProduct?.amount}" />

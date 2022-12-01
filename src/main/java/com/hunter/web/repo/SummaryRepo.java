@@ -17,16 +17,17 @@ import com.hunter.web.model.TotalStock;
 public interface SummaryRepo extends JpaRepository<StockIn, Long>{
 	
 	//Total Stock
-	@Query("SELECT p.name AS name, p.size AS size, p.colour AS colour, p.brand AS brand,"
-			+ "COUNT(DISTINCT p.id) AS totalProductCount, COALESCE(SUM(p.quantity),0) - COALESCE(SUM(sop.quantity),0) AS totalQuantity "
-			+ "FROM Product p LEFT JOIN StockIn si ON si.id = p.stockIn "
-			+ "LEFT JOIN StockOutProduct sop ON p.id = sop.product GROUP BY p.name, p.size, p.colour, p.brand")
+	@Query("SELECT new com.hunter.web.model.TotalStock(p.name as name, p.size as size, p.colour as colour, p.brand as brand, p.productType as productType, "
+			+ "COUNT(DISTINCT p.id) as totalProductCount, "
+			+ "COALESCE(p.quantity, 0) - COALESCE(SUM(sop.quantity), 0) as totalQuantity) "
+			+ "FROM Product p LEFT JOIN StockOutProduct sop ON p.id = sop.product "
+			+ "GROUP BY p.id, p.name , p.size , p.colour , p.brand, p.productType")
 	List<TotalStock> findAllTotalStocksByProductDetails();
 	
 	//Total Sale
-	@Query("SELECT p.name AS productName, p.size AS size, p.colour AS colour, p.brand AS brand, COALESCE(SUM(sop.quantity), 0) AS quantity "
+	@Query("SELECT p.name AS productName, p.size AS size, p.colour AS colour, p.brand AS brand, p.productType AS productType, COALESCE(SUM(sop.quantity), 0) AS quantity "
 			+ "FROM StockOutProduct sop LEFT JOIN Product p on p.id = sop.product "
-			+ "GROUP BY p.name, p.size, p.colour, p.brand")
+			+ "GROUP BY p.name, p.size, p.colour, p.brand, p.productType")
 	List<TotalSale> findTotalSales();
 	
 	@Query("FROM StockOut so WHERE EXISTS (SELECT 1 FROM StockOutProduct sop LEFT JOIN Product p ON p.id = sop.product "

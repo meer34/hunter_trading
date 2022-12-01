@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>INVOICE</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/icon" href="images/fav_icon.png"/>
+    <!-- Main Style -->
+    <link href="css/style.css" type="text/css" rel="stylesheet">
+    <!-- Fonts -->
+    <!-- Open Sans for body font -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <!-- Raleway for Title -->
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+  </head>
+  <body onload="window.print()">
+    <!--body-->
+    <!--PRINT-->
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <img src="images/head.png" class="img-responsive">
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="col-lg-12 logo_style" style="padding: 0 25px;">
+              <p style="font-size: 22px; margin-top: 10px;">HUNTER Garments<span class="pull-right" style="font-size:16px !important;" th:text="${'Bill No. :' + stockOut.billNo}"></span></p>
+              <p><span class="pull-left">Sold By:<br/><br/>Khidirpur, Kolkata, <br/>
+                West Bengal 700023
+                India</span>  <span class="pull-right">Billing Address :<br/><br/>
+                Name: <span th:text="${stockOut.customer?.name}" /><br/>
+                Address: <span th:text="${stockOut.customer?.address}" /><br/>
+                Party State Code: <u th:text="${stockOut.customer?.stateCode}" /></span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="col-lg-12">
+              <div class="tile">
+                <table class="table table-bordered table-striped">
+                  <tr class="tdcolor">
+                    <th>Sl No.</th>
+                    <th>PRODUCT</th>
+                    <th>RATE</th>
+                    <th>QUANTITY</th>
+                    <th>AMOUNT</th>
+                  </tr>
+                  <tr th:each="product, iterator : ${stockOut.productList}">
+                    <td scope="row" th:text="${iterator.count}" />
+                    <td th:text="${product?.product?.name}" />
+                    <td th:text="${product.rate}" />
+                    <td th:text="${product.quantity}" />
+                    <td th:text="${product.amount}" />
+                  </tr>
+                  <colgroup span="2">
+                  </colgroup>
+                  <colgroup span="2">
+                  </colgroup>
+                  <tr>
+                    <td rowspan="7" colspan="2">PAYMENT MODE:  BANK<br/><br/>
+                      IN WORD: (TWO THOUSAND ONLY)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" scope="col">Total AMOUNT
+                    </td>
+                    <td scope="col" th:text="${'Rs. ' + stockOut.totalPrice}" />
+                  </tr>
+                  <tr>
+                    <td colspan="2" scope="col">Discount
+                    </td>
+                    <td scope="col" th:text="${'Rs. ' + stockOut.discount}" />
+                  </tr>
+                  <tr>
+                    <td colspan="2" scope="col">Labour Charges
+                    </td>
+                    <td scope="col" th:text="${'Rs. ' + stockOut.labourCharge}" />
+                  </tr>
+                  <tr>
+                    <td colspan="2" scope="col" class="tdcolor">Net Amount</td>
+                    <td scope="col" class="tdcolor" th:text="${'Rs. ' + stockOut.netAmount}"/>
+                  </tr>
+                  <tr>
+                    <td colspan="2" scope="col">Total Paid</td>
+                    <td scope="col" th:text="${'Rs. ' + stockOut.totalPaid}" />
+                  </tr>
+                  <tr>
+                    <td colspan="2" scope="col">Total Due</td>
+                    <td scope="col" th:text="${'Rs. ' + stockOut.totalDue}" />
+                  </tr>
+                  <tr class="tdcolor">
+                    <th colspan="6">
+                      <p style="font-size: 12px; margin-bottom: 0px;">Goods once sold cannot be taken back.
+                        All subject to Kolkata Jurisdiction.
+                      </p>
+                    </th>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="col-lg-12 logo_style" style="padding: 0 25px;">
+            <p style="font-size: 12px; line-height: 2;">
+               <span class="pull-right" style="text-align: center; line-height: 2;"> <b>For Hunter Garments</b><br/>
+              ___________________________________<br/>
+              Authorised Signatory
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

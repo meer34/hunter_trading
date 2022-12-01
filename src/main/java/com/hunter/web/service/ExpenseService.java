@@ -1,6 +1,7 @@
 package com.hunter.web.service;
 
 import java.text.ParseException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.hunter.web.model.Expense;
+import com.hunter.web.model.ExpenseType;
 import com.hunter.web.repo.ExpenseRepo;
 import com.hunter.web.specification.ExpenseSearchSpecification;
 import com.hunter.web.util.SearchSpecificationBuilder;
@@ -15,8 +17,7 @@ import com.hunter.web.util.SearchSpecificationBuilder;
 @Service
 public class ExpenseService {
 
-	@Autowired
-	private ExpenseRepo expenseRepo;
+	@Autowired private ExpenseRepo expenseRepo;
 
 	public Expense saveExpenseToDB(Expense expense) {
 		return expenseRepo.save(expense);
@@ -45,6 +46,34 @@ public class ExpenseService {
 		ExpenseSearchSpecification spec = (ExpenseSearchSpecification) SearchSpecificationBuilder.build(fromDate, toDate, keyword, Expense.class);
 		return expenseRepo.findAll(spec, pageRequest);
 
+	}
+	
+	public List<Expense> findAllNotSyncedData() {
+		return expenseRepo.findAllNotSyncedData();
+	}
+
+	public Expense saveRemoteData(Expense expense) {
+		expense.setSynced(true);
+		
+		Long tempId = expense.getId();
+		if(expense.getRemoteId() != null) expense.setId(expense.getRemoteId());
+		else expense.setId(0L);
+		expense.setRemoteId(tempId);
+		
+		ExpenseType expenseType = expense.getExpenseType();
+		if(expenseType != null) {
+			tempId = expenseType.getId();
+			if(expenseType.getRemoteId() != null) expenseType.setId(expenseType.getRemoteId());
+			else expenseType.setId(0L);
+			expenseType.setRemoteId(tempId);
+		}
+		
+		System.out.println("Saving Expense with id: " + expense.getId() + " remote id: " + expense.getRemoteId());
+		return expenseRepo.saveAndFlush(expense);
+	}
+
+	public void markAsSynced(Long id, Long serverId) {
+		expenseRepo.markAsSynced(id, serverId);
 	}
 
 }

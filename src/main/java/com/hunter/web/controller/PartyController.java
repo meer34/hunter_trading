@@ -26,7 +26,7 @@ public class PartyController {
 	@GetMapping("/add-party-page")
 	public String showAddPartyPage(Model model) {
 		model.addAttribute("party", new Party());
-		model.addAttribute("header", "Create Party");
+		model.addAttribute("header", "Create Manufacturer");
 		return "party-create";
 	}
 
@@ -61,7 +61,7 @@ public class PartyController {
 
 		System.out.println("Got edit request for party id " + id);
 		model.addAttribute("party", partyService.findUserById(Long.parseLong(id)));
-		model.addAttribute("header", "Edit Party");
+		model.addAttribute("header", "Edit Manufacturer");
 		return "party-create";
 
 	}
@@ -73,8 +73,16 @@ public class PartyController {
 			@RequestParam("id") String id) throws Exception{
 
 		System.out.println("Got delete request for party id " + id);
-		partyService.deleteUserById(Long.parseLong(id));
-		redirectAttributes.addFlashAttribute("successMessage", "Party with id " + id + " deleted successfully!");
+		Party party = partyService.findUserById(Long.parseLong(id));
+		
+		if(party != null) {
+			if(party.getStockInList().isEmpty()) {
+				partyService.deleteUserById(Long.parseLong(id));
+				redirectAttributes.addFlashAttribute("successMessage", "Party with id " + id + " deleted successfully!");
+			} else {
+				redirectAttributes.addFlashAttribute("successMessage", party.getStockInList().size() + " Stock In entries present this party!");
+			}
+		}
 		return "redirect:/party";
 		
 	}

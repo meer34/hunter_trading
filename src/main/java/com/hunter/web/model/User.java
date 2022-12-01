@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +16,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hunter.data.controller.DeleteEventListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,17 +30,21 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @Entity
+@EntityListeners(DeleteEventListener.class)
 @Table(name="users")
 public class User {
 	@Id
-	@Column(name = "user_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
 	private Long id;
+	
 	private String username;
 	@Column(unique=true)
 	private String phone;
 	private String pin;
 	private Boolean enabled;
+	
+	@JsonFormat(pattern="yyyy-MM-dd")
     private Date pinGenerationTime;
     
     private static final long MIN_TO_LONG = 24L*60L*60L * 1000L;

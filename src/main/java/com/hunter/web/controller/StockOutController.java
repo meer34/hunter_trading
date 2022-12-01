@@ -42,25 +42,26 @@ public class StockOutController {
 			@RequestParam(value="name", required = false) String name,
 			@RequestParam(value="pSize", required = false) String pSize,
 			@RequestParam(value="colour", required = false) String colour,
-			@RequestParam(value="brand", required = false) String brand) throws ParseException {
-		
+			@RequestParam(value="brand", required = false) String brand,
+			@RequestParam(value="productType", required = false) String productType) throws ParseException {
+
 		Page<StockOut> listPage = null;
-		
+
 		if(keyword == null && fromDate == null && toDate == null) {
 			System.out.println("StockOut home page");
-			if(name != null) listPage = stockOutService.getAllStockOutsForProduct(name, pSize, colour, brand, page.orElse(1) - 1, size.orElse(initialPageSize));
+			if(name != null) listPage = stockOutService.getAllStockOutsForProduct(name, pSize, colour, brand, productType, page.orElse(1) - 1, size.orElse(initialPageSize));
 			else listPage = stockOutService.getAllStockOuts(page.orElse(1) - 1, size.orElse(initialPageSize));
-			
+
 		} else {
 			System.out.println("Searching StockOut for fromDate:" + fromDate + " and toDate:" +toDate +" and keyword:" + keyword);
 			listPage = stockOutService.searchStockOutByDateAndKeyword(keyword, fromDate, toDate, page.orElse(1) - 1, size.orElse(initialPageSize));
-			
+
 			model.addAttribute("fromDate", fromDate);
 			model.addAttribute("toDate", toDate);
 			model.addAttribute("keyword", keyword);
-			
+
 		}
-		
+
 		model.addAttribute("listPage", listPage);
 		int totalPages = listPage.getTotalPages();
 		if (totalPages > 0) {
@@ -76,15 +77,15 @@ public class StockOutController {
 
 	@GetMapping("/addStockOutPage")
 	public String showAddStockOutPage(Model model) {
-		
+
 		model.addAttribute("customers", customerService.getAllUsers());
 		model.addAttribute("productNames", stockInService.getAllStockInProductNames());
 		model.addAttribute("header", "Add Stock Out");
-		
+
 		return "stock-out-create";
-		
+
 	}
-	
+
 	@RequestMapping(value = "/editStockOutPage",
 			method = RequestMethod.GET)
 	public String editStockOutPage(Model model, @RequestParam("id") String id) throws Exception{
@@ -94,23 +95,28 @@ public class StockOutController {
 		model.addAttribute("customers", customerService.getAllUsers());
 		model.addAttribute("productNames", stockInService.getAllStockInProductNames());
 		model.addAttribute("header", "Edit Stock Out");
-		
+
 		model.addAttribute("stockOut", stockOutService.findStockOutById(Long.parseLong(id)));
-		
+
 		return "stock-out-create";
 
 	}
 
 	@RequestMapping(value = "/saveStockOut",
 			method = RequestMethod.POST)
-	public String saveStockOut(Model model, StockOut stockOut, RedirectAttributes redirectAttributes) throws Exception{
-
-		stockOutService.saveStockOutToDB(stockOut);
-		redirectAttributes.addFlashAttribute("successMessage", "Stock Out saved successfully!");
-		return "redirect:/stock-out";
+	public String saveStockOut(Model model, StockOut stockOut, 
+			RedirectAttributes redirectAttributes, @RequestParam(value="addProductFlag", required = false) String addProductFlag) throws Exception{
+		if(addProductFlag == null) {
+			stockOutService.saveStockOutToDB(stockOut);
+			redirectAttributes.addFlashAttribute("successMessage", "Stock Out saved successfully!");
+			return "redirect:/stock-out";
+		} else {
+			StockOut savedStockOut = stockOutService.saveStockOutToDB(stockOut);
+			return "redirect:/editStockOutPage?action=Edit&id=" + savedStockOut.getId();
+		}
 
 	}
-	
+
 	@RequestMapping(value = "/viewStockOut",
 			method = RequestMethod.GET)
 	public String viewStockOut(Model model, @RequestParam("id") String id) throws Exception{

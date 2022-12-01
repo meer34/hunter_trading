@@ -6,6 +6,7 @@ public interface TotalSale {
 	String getSize();
 	String getColour();
 	String getBrand();
+	String getProductType();
 	Integer getQuantity();
 	
 }

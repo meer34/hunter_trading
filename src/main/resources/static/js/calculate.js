@@ -19,10 +19,33 @@ $("#addStockInPartBtn").click(function () {
 	size = document.getElementById("size");
 	colour = document.getElementById("colour");
 	brand = document.getElementById("brand");
+	
+	productType = document.getElementById("productType");
+	productCode = document.getElementById("productCode");
+	mrp = document.getElementById("mrp");
+	sellRate = document.getElementById("sellRate");
+	
 	quantity = document.getElementById("quantity");
 	rate = document.getElementById("rate");
 	amount = document.getElementById("amount");
 	scanCode = document.getElementById("scanCode");
+	
+	if(productName.value == '') {
+		alert('Please fill the Product Name');
+		return;
+	} else if(size.value == '') {
+		alert('Please fill the Size');
+		return;
+	} else if(colour.value == '') {
+		alert('Please fill the Colour');
+		return;
+	} else if(brand.value == '') {
+		alert('Please fill the Brand');
+		return;
+	} else if(productType.value == '') {
+		alert('Please fill the Product Type');
+		return;
+	}
 
 	var table = document.getElementById("productTable");
 	var row = table.insertRow(1);
@@ -32,12 +55,20 @@ $("#addStockInPartBtn").click(function () {
 	row.insertCell(2).innerHTML = size.value;
 	row.insertCell(3).innerHTML = colour.value;
 	row.insertCell(4).innerHTML = brand.value;
-	row.insertCell(5).innerHTML = quantity.value;
-	row.insertCell(6).innerHTML = rate.value;
-	row.insertCell(7).innerHTML = amount.value;
+	
+	row.insertCell(5).innerHTML = productType.value;
+	row.insertCell(6).innerHTML = productCode.value;
+	row.insertCell(7).innerHTML = mrp.value;
+	row.insertCell(8).innerHTML = sellRate.value;
+	
+	row.insertCell(9).innerHTML = quantity.value;
+	row.insertCell(10).innerHTML = rate.value;
+	row.insertCell(11).innerHTML = amount.value;
 
-	var stockInParts =  `|~|` + productName.value + `|~|` + size.value + `|~|` + colour.value + `|~|` + brand.value + `|~|` + quantity.value + `|~|` + rate.value + `|~|` + amount.value + `|~|` + scanCode.value;
-	row.insertCell(8).innerHTML = `<div class="dashboardicon2" style="text-align: left;" >`
+	var stockInParts =  `|~|` + productName.value + `|~|` + size.value + `|~|` + colour.value + `|~|` + brand.value 
+			+ `|~|` + productType.value + `|~|` + productCode.value + `|~|` + mrp.value + `|~|` + sellRate.value
+			+ `|~|` + quantity.value + `|~|` + rate.value + `|~|` + amount.value + `|~|` + scanCode.value;
+	row.insertCell(12).innerHTML = `<div class="dashboardicon2" style="text-align: left;" >`
 			+ `<i class="fa fa-close buttonNew2" id="deleteProductBtn"></i>`
 			+ `<input type="hidden" name="stockInParts" value="`+ stockInParts +`" >`;
 
@@ -46,6 +77,10 @@ $("#addStockInPartBtn").click(function () {
 	size.value = ``;
 	colour.value = ``;
 	brand.value = ``;
+	productType.value = ``;
+	productCode.value = ``;
+	mrp.value = ``;
+	sellRate.value = ``;
 	quantity.value = ``;
 	rate.value = ``;
 	amount.value = ``;
@@ -55,7 +90,9 @@ $("#addStockInPartBtn").click(function () {
 
 //StockOut
 $("#addStockOutPartBtn").click(function () {
-	productId = document.getElementById("brands");
+	
+	if(!(validatePageData("select") && validatePageData("input"))) return;
+	
 	quantity = document.getElementById("quantity");
 	rate = document.getElementById("rate");
 	amount = document.getElementById("amount");
@@ -69,9 +106,11 @@ $("#addStockOutPartBtn").click(function () {
 	productName = document.getElementById("productNames");
 	size = document.getElementById("sizes");
 	colour = document.getElementById("colours");
-
-	var brandSel = document.getElementById("brands");
-	var brand= brandSel.options[brandSel.selectedIndex].text;
+	brand = document.getElementById("brands");
+	var productTypeSel = document.getElementById("productTypes");
+	productCode = document.getElementById("productCode");
+	mrp = document.getElementById("mrp");
+	sellRate = document.getElementById("sellRate");
 
 	var table = document.getElementById("productTable");
 	var row = table.insertRow(1);
@@ -79,46 +118,45 @@ $("#addStockOutPartBtn").click(function () {
 	row.insertCell(0).innerHTML = productName.value;
 	row.insertCell(1).innerHTML = size.value;
 	row.insertCell(2).innerHTML = colour.value;
-	row.insertCell(3).innerHTML = brand;
-	row.insertCell(4).innerHTML = quantity.value;
-	row.insertCell(5).innerHTML = rate.value;
-	row.insertCell(6).innerHTML = amount.value;
+	row.insertCell(3).innerHTML = brand.value;
+	row.insertCell(4).innerHTML = productTypeSel.options[productTypeSel.selectedIndex].text;
+	row.insertCell(5).innerHTML = productCode.value;
+	row.insertCell(6).innerHTML = mrp.value;
+	row.insertCell(7).innerHTML = sellRate.value;
+	row.insertCell(8).innerHTML = quantity.value;
+	row.insertCell(9).innerHTML = rate.value;
+	row.insertCell(10).innerHTML = amount.value;
 
-	var stockOutParts =  `|~|` + brandSel.value + `|~|` + quantity.value + `|~|` + rate.value + `|~|` + amount.value;
+	var stockOutParts =  `|~|` + productTypeSel.value + `|~|` + quantity.value + `|~|` + rate.value + `|~|` + amount.value;
 	
-	row.insertCell(7).innerHTML = `<div class="dashboardicon2" style="text-align: left;" >`
+	row.insertCell(11).innerHTML = `<div class="dashboardicon2" style="text-align: left;" >`
 			+ `<i class="fa fa-close buttonNew2" id="deleteProductBtn"></i>`
 			+ `<input type="hidden" name="stockOutParts" value="`+ stockOutParts +`" >`;
 	
-	var sizeTag = '<option selected disabled="disabled" value="">Size</option>';
-	var colourTag = '<option selected disabled="disabled" value="">Colour</option>';
-	var brandTag = '<option selected disabled="disabled" value="">Brand</option>';
-	var quantityTag = '<input type="number" class="form-control" id="quantity" placeholder="Quantity" onChange="calculateAmount()">';
-	var rateTag = '<input type="number" class="form-control" id="rate" placeholder="Rate" onChange="calculateAmount()">';
-	var amountTag = '<input type="number" class="form-control" id="amount" placeholder="Amount" readonly>';
-	
-	$('#sizes').html(sizeTag);
-	$('#colours').html(colourTag);
-	$('#brands').html(brandTag);
-	$('#quantity').html(quantityTag);
-	$('#rate').html(rateTag);
-	$('#amount').html(amountTag);
+	stockOutForm = document.getElementById("stockOutForm");
+	var FN = document.createElement("input");
+    FN.setAttribute("type", "text");
+    FN.setAttribute("name", "addProductFlag");
+    FN.setAttribute("value", "1");
+    
+    stockOutForm.appendChild(FN);
+    document.createElement('form').submit.call(stockOutForm);
 
 });
 
 
 $("#productTable").on('click', '#deleteProductBtn', function () {
+	if(!confirm("Sure want to delete this entry? This action cannot be reverted!")) return;
+	
 	$(this).closest('tr').remove();
+	stockOutForm = document.getElementById("stockOutForm");
+	var FN = document.createElement("input");
+    FN.setAttribute("type", "text");
+    FN.setAttribute("name", "addProductFlag");
+    FN.setAttribute("value", "1");
+    stockOutForm.appendChild(FN);
+    document.createElement('form').submit.call(stockOutForm);
 });
-
-
-
-
-
-
-
-
-
 
 
 //Stock Out

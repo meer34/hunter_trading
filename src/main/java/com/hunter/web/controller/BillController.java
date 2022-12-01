@@ -1,5 +1,6 @@
 package com.hunter.web.controller;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hunter.web.model.StockOut;
+import com.hunter.web.service.AdminService;
 import com.hunter.web.service.StockInService;
 import com.hunter.web.service.StockOutService;
 import com.hunter.web.service.SummaryService;
+import com.hunter.web.util.NumberToWords;
 
 @Controller
 @PropertySource("classpath:hunter_garments.properties")
@@ -25,6 +28,7 @@ public class BillController {
 	
 	@Autowired StockInService stockInService;
 	@Autowired StockOutService stockOutService;
+	@Autowired AdminService adminService;
 	@Autowired SummaryService summaryService;
 	
 	@Value("${INITIAL_PAGE_SIZE}")
@@ -56,6 +60,7 @@ public class BillController {
 			
 		}
 		
+		model.addAttribute("admins", adminService.getAllUsers());
 		model.addAttribute("listPage", listPage);
 		int totalPages = listPage.getTotalPages();
 		if (totalPages > 0) {
@@ -76,12 +81,19 @@ public class BillController {
 	}
 	
 	@RequestMapping("/printStockOutBill")
-	public String printGstBill(Model model, @RequestParam("printId") Long printId) {
+	public String printGstBill(Model model, @RequestParam("printId") Long printId, @RequestParam("contact") String contact) {
 		
 		System.out.println("Received bill print request for stock id: " + printId);
 		
 		StockOut stockOut = stockOutService.findStockOutById(printId);
 		model.addAttribute("stockOut", stockOut);
+		System.out.println("###########" + contact);
+		model.addAttribute("contact", contact);
+		if(stockOut.getTotalPaid() > 0) {
+			model.addAttribute("paidAmtInText", NumberToWords.convertToIndianCurrency(String.valueOf(stockOut.getTotalPaid())));
+		} else {
+			model.addAttribute("paidAmtInText", "Rupees Zero Only");
+		}
 		
 		if("GST".equalsIgnoreCase(stockOut.getBillType())) {
 			return "bill_template_gst";

@@ -153,6 +153,7 @@ public class ExpenseController {
 			String fileName = StringUtils.cleanPath(expense.getBillFile().getOriginalFilename());
 			if(!"".equals(fileName)) {
 				String expenseBillFileName = "Bill_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + "_" + fileName;
+				Files.createDirectories(Paths.get(expenseBillPath));
 				Path path = Paths.get(expenseBillPath + expenseBillFileName);
 				Files.copy(expense.getBillFile().getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 				

@@ -43,7 +43,7 @@ public class SummaryService {
 	}
 	
 	public List<TotalStock> getTotalStocksByProductDetails() {
-		return summaryRepo.findAllTotalStocksByProductDetails();
+		return TotalStock.getListOfTotalStock(summaryRepo.findAllTotalStocksByProductDetails());
 	}
 	
 	public List<TotalSale> getAllTotalSales() {

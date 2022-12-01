@@ -26,6 +26,7 @@
                           <th class="table_heading">Size</th>
                           <th class="table_heading">Colour</th>
                           <th class="table_heading">Brand</th>
+                          <th class="table_heading">Product Type</th>
                           <th class="table_heading">Quantity</th>
                           <th class="table_heading" style="width: 19%">Action</th>
                         </tr>
@@ -36,11 +37,12 @@
                           <td th:text="${totalSale.size}" />
                           <td th:text="${totalSale.colour}" />
                           <td th:text="${totalSale.brand}" />
+                          <td th:text="${totalSale.productType}" />
                           <td th:text="${totalSale.quantity}" />
                           <td>
                           	<div class="dashboardicon2" style="text-align: middle;">
                       			<input type="button" name="action" class="submit action-button" value="View" style=" border-radius: 0;"
-                      				th:attr="onclick=|location.href='stock-out?name=${totalSale.productName}&pSize=${totalSale.size}&colour=${totalSale.colour}&brand=${totalSale.brand}'|" >
+                      				th:attr="onclick=|location.href='stock-out?name=${totalSale.productName}&pSize=${totalSale.size}&colour=${totalSale.colour}&brand=${totalSale.brand}&productType=${totalSale.productType}'|" >
                     		</div>
                     	   </td>
                         </tr>
